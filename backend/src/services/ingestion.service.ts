@@ -5,6 +5,7 @@
  */
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { v4 as uuidv4 } from "uuid";
+import fs from "fs";
 
 import { config } from "@config/env";
 import logger from "@utils/logger.util";
@@ -27,6 +28,20 @@ export async function ingestDocument(documentId: string): Promise<void> {
     }
 
     logger.info(`[Ingestion] Starting ingestion for: ${doc.fileName} (${documentId})`);
+
+    // If already READY and file is gone, just stop (already indexed successfully)
+    if (doc.status === DocumentStatus.READY) {
+        logger.info(`[Ingestion] Document ${doc.fileName} is already READY. Skipping.`);
+        return;
+    }
+
+    if (!fs.existsSync(doc.filePath)) {
+        logger.warn(`[Ingestion] Source file missing for ${doc.fileName}: ${doc.filePath}`);
+        doc.status = DocumentStatus.FAILED;
+        doc.errorMessage = "Source file missing from server. Cannot re-process.";
+        await doc.save();
+        return;
+    }
 
     // Mark as PROCESSING
     doc.status = DocumentStatus.PROCESSING;
