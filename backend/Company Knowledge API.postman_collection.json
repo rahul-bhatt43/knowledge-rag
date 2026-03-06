@@ -1,0 +1,4041 @@
+{
+  "info": {
+    "_postman_id": "0c86ffcd-1dee-4b69-92ff-e0a04a746648",
+    "name": "Company Knowledge API",
+    "description": "API endpoints for the Company Knowledge RAG System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "42308200",
+    "_collection_link": "https://go.postman.co/collection/42308200-0c86ffcd-1dee-4b69-92ff-e0a04a746648?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Rahul\",\n  \"lastName\": \"Doe\",\n  \"email\": \"rahul@yopmail.com\",\n  \"password\": \"Test@123\",\n  \"role\": \"STAFF\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201(ADMIN)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"email\": \"john@yopmail.com\",\n  \"password\": \"Test@123\",\n  \"role\": \"ADMIN\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "97"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "790"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "872"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"368-K9UrRdhlQOH1uLLRBwl5xvST1RU\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 11:42:53 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"data\": {\n        \"user\": {\n            \"email\": \"john@yopmail.com\",\n            \"firstName\": \"John\",\n            \"lastName\": \"Doe\",\n            \"role\": \"ADMIN\",\n            \"createdBy\": null,\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"_id\": \"69aabdbd190fdc17dfff7cd2\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T11:42:53.587Z\",\n            \"updatedAt\": \"2026-03-06T11:42:53.587Z\",\n            \"id\": \"69aabdbd190fdc17dfff7cd2\"\n        },\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZGJkMTkwZmRjMTdkZmZmN2NkMiIsImVtYWlsIjoiam9obkB5b3BtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3Mjc5NzM3MywiZXhwIjoxNzczNDAyMTczfQ.L2WsnGlC9Ac_wQxuktqnNqzZ21q70xXqGY4j3JeITzQ\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZGJkMTkwZmRjMTdkZmZmN2NkMiIsImVtYWlsIjoiam9obkB5b3BtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3Mjc5NzM3MywiZXhwIjoxNzc1Mzg5MzczfQ.QMqTqSmPnxEhpoRYRMJj8wQEyixmk3LJeYXjQGasBEs\"\n    },\n    \"message\": \"User registered successfully\"\n}"
+            },
+            {
+              "name": "201(MANAGER)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"Rohan\",\n  \"lastName\": \"Doe\",\n  \"email\": \"rohan@yopmail.com\",\n  \"password\": \"Test@123\",\n  \"role\": \"MANAGER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "93"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "663"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "884"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"374-L1V4uSJtFupHxwYlr8L18x5Tn0I\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 11:45:00 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"data\": {\n        \"user\": {\n            \"email\": \"rohan@yopmail.com\",\n            \"firstName\": \"Rohan\",\n            \"lastName\": \"Doe\",\n            \"role\": \"MANAGER\",\n            \"createdBy\": null,\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"_id\": \"69aabe3c190fdc17dfff7cd7\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T11:45:00.634Z\",\n            \"updatedAt\": \"2026-03-06T11:45:00.634Z\",\n            \"id\": \"69aabe3c190fdc17dfff7cd7\"\n        },\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZTNjMTkwZmRjMTdkZmZmN2NkNyIsImVtYWlsIjoicm9oYW5AeW9wbWFpbC5jb20iLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc3Mjc5NzUwMCwiZXhwIjoxNzczNDAyMzAwfQ.C1eIa6P7fd5Ia_Ut5JZwffdozNuzoCnWjzv58kOsO1w\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZTNjMTkwZmRjMTdkZmZmN2NkNyIsImVtYWlsIjoicm9oYW5AeW9wbWFpbC5jb20iLCJyb2xlIjoiTUFOQUdFUiIsImlhdCI6MTc3Mjc5NzUwMCwiZXhwIjoxNzc1Mzg5NTAwfQ.xOOHazoogD5--zp_mbCOLPG_nyCoYPzb9vPF2uLx9PM\"\n    },\n    \"message\": \"User registered successfully\"\n}"
+            },
+            {
+              "name": "Register",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"Rahul\",\n  \"lastName\": \"Doe\",\n  \"email\": \"rahul@yopmail.com\",\n  \"password\": \"Test@123\",\n  \"role\": \"STAFF\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/register",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "register"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "92"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "623"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "876"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"36c-jqn9s2arZZw21o40txJ/abjACtA\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 11:45:41 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"data\": {\n        \"user\": {\n            \"email\": \"rahul@yopmail.com\",\n            \"firstName\": \"Rahul\",\n            \"lastName\": \"Doe\",\n            \"role\": \"STAFF\",\n            \"createdBy\": null,\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"_id\": \"69aabe64190fdc17dfff7cda\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T11:45:40.972Z\",\n            \"updatedAt\": \"2026-03-06T11:45:40.972Z\",\n            \"id\": \"69aabe64190fdc17dfff7cda\"\n        },\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZTY0MTkwZmRjMTdkZmZmN2NkYSIsImVtYWlsIjoicmFodWxAeW9wbWFpbC5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3NzI3OTc1NDEsImV4cCI6MTc3MzQwMjM0MX0.eaV_PRDrDOr_pQ41L-ww9WTAspqbJf_W2ZGaCr_uI3Q\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZTY0MTkwZmRjMTdkZmZmN2NkYSIsImVtYWlsIjoicmFodWxAeW9wbWFpbC5jb20iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3NzI3OTc1NDEsImV4cCI6MTc3NTM4OTU0MX0.B612x8GP7gcfUoCqQR0WutqXjXu0DrLBcQBuBxO55ho\"\n    },\n    \"message\": \"User registered successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"john@yopmail.com\",\n  \"password\": \"Test@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"john@yopmail.com\",\n  \"password\": \"Test@123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/login",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "login"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "94"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "701"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "860"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"35c-utva6LIz0OtiNLCfa3cTPgyBymU\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 11:44:22 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"user\": {\n            \"_id\": \"69aabdbd190fdc17dfff7cd2\",\n            \"email\": \"john@yopmail.com\",\n            \"firstName\": \"John\",\n            \"lastName\": \"Doe\",\n            \"role\": \"ADMIN\",\n            \"createdBy\": null,\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T11:42:53.587Z\",\n            \"updatedAt\": \"2026-03-06T11:42:53.587Z\",\n            \"id\": \"69aabdbd190fdc17dfff7cd2\"\n        },\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZGJkMTkwZmRjMTdkZmZmN2NkMiIsImVtYWlsIjoiam9obkB5b3BtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3Mjc5NzQ2MiwiZXhwIjoxNzczNDAyMjYyfQ.3yBc4TZ3-hKFifmWpw-sVv-6zy_z6h2PjPUA-pRVPtk\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZGJkMTkwZmRjMTdkZmZmN2NkMiIsImVtYWlsIjoiam9obkB5b3BtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3Mjc5NzQ2MiwiZXhwIjoxNzc1Mzg5NDYyfQ.HHp-PyRW8hLJDRpmlYrkn_MfvMva2NBP0QjZs9cpiPs\"\n    },\n    \"message\": \"Login successful\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZGJkMTkwZmRjMTdkZmZmN2NkMiIsImVtYWlsIjoiam9obkB5b3BtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MjgwMDkwMywiZXhwIjoxNzc1MzkyOTAzfQ.PUYojyE-UWqcnROWKrsVBQ-RyhM4caugygnVZ1ntfcA\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh-token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "refresh-token"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZGJkMTkwZmRjMTdkZmZmN2NkMiIsImVtYWlsIjoiam9obkB5b3BtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MjgwMDkwMywiZXhwIjoxNzc1MzkyOTAzfQ.PUYojyE-UWqcnROWKrsVBQ-RyhM4caugygnVZ1ntfcA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/refresh-token",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "refresh-token"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "90"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "575"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "872"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"368-nqiK8a9BW3NzOixlixnfpfCF/9Q\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:42:17 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"user\": {\n            \"_id\": \"69aabdbd190fdc17dfff7cd2\",\n            \"email\": \"john@yopmail.com\",\n            \"firstName\": \"John\",\n            \"lastName\": \"Doe\",\n            \"role\": \"ADMIN\",\n            \"createdBy\": null,\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T11:42:53.587Z\",\n            \"updatedAt\": \"2026-03-06T12:38:14.938Z\",\n            \"id\": \"69aabdbd190fdc17dfff7cd2\"\n        },\n        \"accessToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZGJkMTkwZmRjMTdkZmZmN2NkMiIsImVtYWlsIjoiam9obkB5b3BtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MjgwMDkzNywiZXhwIjoxNzczNDA1NzM3fQ.akkdnyR_ErA2AFTWjzYB4lTiSZFpAvMX2XhGp2N5RQc\",\n        \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YWFiZGJkMTkwZmRjMTdkZmZmN2NkMiIsImVtYWlsIjoiam9obkB5b3BtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc3MjgwMDkzNywiZXhwIjoxNzc1MzkyOTM3fQ.Ss5RJE72Ze348nYWNYlQQo7YQTSqu8KHKj_z5XdbHis\"\n    },\n    \"message\": \"Token refreshed successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "profile"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/profile",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "profile"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "98"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "844"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "385"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"181-X7pUw+8GM8i3jNa+VNJGb8yrRBw\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:37:48 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"user\": {\n            \"_id\": \"69aabdbd190fdc17dfff7cd2\",\n            \"email\": \"john@yopmail.com\",\n            \"firstName\": \"John\",\n            \"lastName\": \"Doe\",\n            \"role\": \"ADMIN\",\n            \"createdBy\": null,\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T11:42:53.587Z\",\n            \"updatedAt\": \"2026-03-06T11:42:53.587Z\",\n            \"id\": \"69aabdbd190fdc17dfff7cd2\"\n        }\n    },\n    \"message\": \"Profile retrieved successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Password",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"Test@123\",\n  \"newPassword\": \"Test@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"currentPassword\": \"Test@123\",\n  \"newPassword\": \"Test@123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "97"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "818"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "72"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"48-JprOLMyUvrn5cJFw5EOM0TYtuRk\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:38:15 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": null,\n    \"message\": \"Password updated successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"rohan@yopmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/forgot-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"email\": \"rohan@yopmail.com\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/forgot-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "forgot-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "96"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "785"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "81"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"51-z7s1wwwsap9eJzL/zGEgKeffQ80\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:38:47 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": null,\n    \"message\": \"Password reset link sent to your email\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"0ce94d8f8fc2fa2a309b44c8cc4f50c270dbfd065128333b86c628a3885db584\",\n  \"newPassword\": \"Test@123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/reset-password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"0ce94d8f8fc2fa2a309b44c8cc4f50c270dbfd065128333b86c628a3885db584\",\n  \"newPassword\": \"Test@123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/reset-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "95"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "730"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "70"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"46-/S5Pv914EO0rg3Lx1TJqoDGg0zg\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:39:42 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": null,\n    \"message\": \"Password reset successfully\"\n}"
+            },
+            {
+              "name": "400",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"token\": \"0ce94d8f8fc2fa2a309b44c8cc4f50c270dbfd065128333b86c628a388db584\",\n  \"newPassword\": \"Test@123\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/auth/reset-password",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "reset-password"
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "94"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "715"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "485"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1e5-4QMWjdw6hhG5zPQ4qcDcW1siSJs\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:39:57 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"success\": false,\n    \"message\": \"Invalid or expired password reset token\",\n    \"stack\": \"Error: Invalid or expired password reset token\\n    at AuthService.resetPassword (C:\\\\Users\\\\panka\\\\Documents\\\\projects\\\\AI\\\\company-knowledge\\\\backend\\\\dist\\\\services\\\\auth.service.js:170:19)\\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\\n    at async C:\\\\Users\\\\panka\\\\Documents\\\\projects\\\\AI\\\\company-knowledge\\\\backend\\\\dist\\\\controllers\\\\auth.controller.js:68:13\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Logout(simply repsonses only)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/auth/logout",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "auth",
+                    "logout"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "93"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "652"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "60"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"3c-7ABFJE+Plrd6qApCY62ntXMl2EA\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:41:00 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": null,\n    \"message\": \"Logout successful\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "92"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "286"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1018"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"3fa-CzCMLvg24YW6lchrX1Bjo8h6ZJU\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:31:51 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"users\": [\n            {\n                \"_id\": \"69aabe64190fdc17dfff7cda\",\n                \"email\": \"rahul@yopmail.com\",\n                \"firstName\": \"Rahul\",\n                \"lastName\": \"Doe\",\n                \"role\": \"STAFF\",\n                \"createdBy\": null,\n                \"managerId\": null,\n                \"adminId\": null,\n                \"status\": \"ACTIVE\",\n                \"projectRoles\": [],\n                \"createdAt\": \"2026-03-06T11:45:40.972Z\",\n                \"updatedAt\": \"2026-03-06T11:45:40.972Z\",\n                \"id\": \"69aabe64190fdc17dfff7cda\"\n            },\n            {\n                \"_id\": \"69aabe3c190fdc17dfff7cd7\",\n                \"email\": \"rohan@yopmail.com\",\n                \"firstName\": \"Rohan\",\n                \"lastName\": \"Doe\",\n                \"role\": \"MANAGER\",\n                \"createdBy\": null,\n                \"managerId\": null,\n                \"adminId\": null,\n                \"status\": \"ACTIVE\",\n                \"projectRoles\": [],\n                \"createdAt\": \"2026-03-06T11:45:00.634Z\",\n                \"updatedAt\": \"2026-03-06T11:45:00.634Z\",\n                \"id\": \"69aabe3c190fdc17dfff7cd7\"\n            },\n            {\n                \"_id\": \"69aabdbd190fdc17dfff7cd2\",\n                \"email\": \"john@yopmail.com\",\n                \"firstName\": \"John\",\n                \"lastName\": \"Doe\",\n                \"role\": \"ADMIN\",\n                \"createdBy\": null,\n                \"managerId\": null,\n                \"adminId\": null,\n                \"status\": \"ACTIVE\",\n                \"projectRoles\": [],\n                \"createdAt\": \"2026-03-06T11:42:53.587Z\",\n                \"updatedAt\": \"2026-03-06T11:42:53.587Z\",\n                \"id\": \"69aabdbd190fdc17dfff7cd2\"\n            }\n        ],\n        \"count\": 3\n    },\n    \"message\": \"Users retrieved successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Admin\",\n  \"lastName\": \"User\",\n  \"email\": \"admin@yopmail.com\",\n  \"role\": \"ADMIN\",\n  \"password\": \"AdminPass123!\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"Admin\",\n  \"lastName\": \"User\",\n  \"email\": \"admin@yopmail.com\",\n  \"role\": \"ADMIN\",\n  \"password\": \"AdminPass123!\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "91"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "252"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "405"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"195-iRNLQrLjWwCiCQz1LIIjS2DqhSs\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:32:26 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"data\": {\n        \"user\": {\n            \"email\": \"admin@yopmail.com\",\n            \"firstName\": \"Admin\",\n            \"lastName\": \"User\",\n            \"role\": \"ADMIN\",\n            \"createdBy\": \"69aabdbd190fdc17dfff7cd2\",\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"_id\": \"69aac95acf5ce0f86b5c7d76\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T12:32:26.295Z\",\n            \"updatedAt\": \"2026-03-06T12:32:26.295Z\",\n            \"id\": \"69aac95acf5ce0f86b5c7d76\"\n        }\n    },\n    \"message\": \"User created successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "69aac95acf5ce0f86b5c7d76"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/users/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "69aac95acf5ce0f86b5c7d76"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "89"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "219"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "510"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1fe-tQuf6YYBaMNRmG5UsNUIgSYaOdA\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:32:58 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"user\": {\n            \"_id\": \"69aac95acf5ce0f86b5c7d76\",\n            \"email\": \"admin@yopmail.com\",\n            \"firstName\": \"Admin\",\n            \"lastName\": \"User\",\n            \"role\": \"ADMIN\",\n            \"createdBy\": {\n                \"_id\": \"69aabdbd190fdc17dfff7cd2\",\n                \"email\": \"john@yopmail.com\",\n                \"firstName\": \"John\",\n                \"lastName\": \"Doe\",\n                \"id\": \"69aabdbd190fdc17dfff7cd2\"\n            },\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T12:32:26.295Z\",\n            \"updatedAt\": \"2026-03-06T12:32:26.295Z\",\n            \"id\": \"69aac95acf5ce0f86b5c7d76\"\n        }\n    },\n    \"message\": \"User retrieved successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Ramesh\",\n  \"role\": \"MANAGER\",\n  \"email\":\"ramesh@yopmail.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "69aac95acf5ce0f86b5c7d76"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"firstName\": \"Ramesh\",\n  \"role\": \"MANAGER\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/users/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "users",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "69aac95acf5ce0f86b5c7d76"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "88"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "184"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "408"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"198-AF0yzGNRg/+tkQQN7/Gep/W63Z8\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:33:33 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"user\": {\n            \"_id\": \"69aac95acf5ce0f86b5c7d76\",\n            \"email\": \"admin@yopmail.com\",\n            \"firstName\": \"Ramesh\",\n            \"lastName\": \"User\",\n            \"role\": \"MANAGER\",\n            \"createdBy\": \"69aabdbd190fdc17dfff7cd2\",\n            \"managerId\": null,\n            \"adminId\": null,\n            \"status\": \"ACTIVE\",\n            \"projectRoles\": [],\n            \"createdAt\": \"2026-03-06T12:32:26.295Z\",\n            \"updatedAt\": \"2026-03-06T12:33:33.393Z\",\n            \"id\": \"69aac95acf5ce0f86b5c7d76\"\n        }\n    },\n    \"message\": \"User updated successfully\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "69aac95acf5ce0f86b5c7d76"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "/C:/Users/panka/Downloads/Final+COmpany.pdf"
+                },
+                {
+                  "key": "description",
+                  "value": "Company handbook document",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "hr,handbook",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/documents/upload",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "documents",
+                "upload"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "file",
+                      "type": "file",
+                      "src": "/C:/Users/panka/Downloads/Final+COmpany.pdf"
+                    },
+                    {
+                      "key": "description",
+                      "value": "Company handbook document",
+                      "type": "text"
+                    },
+                    {
+                      "key": "tags",
+                      "value": "hr,handbook",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/documents/upload",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "documents",
+                    "upload"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "99"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "900"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "226"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"e2-tYk4NT01kjU05D/nqTCynvimkFk\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:10:56 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"data\": {\n        \"documentId\": \"69aac4509307eb24d359825a\",\n        \"fileName\": \"Final+COmpany.pdf\",\n        \"fileSize\": 83558,\n        \"fileType\": \"application/pdf\",\n        \"status\": \"PENDING\"\n    },\n    \"message\": \"Document uploaded successfully. Ingestion started.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/documents?page=1&limit=20&status=READY",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "documents"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "status",
+                  "value": "READY"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Document by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "documents",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "69aac4509307eb24d359825a"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/documents/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "documents",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "69aac4509307eb24d359825a"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "98"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "832"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "664"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"298-Tb+e6Me+QzYKhJuGotXDUO91MnU\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:12:04 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"69aac4509307eb24d359825a\",\n        \"fileName\": \"Final+COmpany.pdf\",\n        \"storedFileName\": \"Final_COmpany-1772799056363-504066394.pdf\",\n        \"filePath\": \"C:\\\\Users\\\\panka\\\\Documents\\\\projects\\\\AI\\\\company-knowledge\\\\backend\\\\uploads\\\\Final_COmpany-1772799056363-504066394.pdf\",\n        \"fileType\": \"application/pdf\",\n        \"fileSize\": 83558,\n        \"status\": \"READY\",\n        \"uploadedBy\": {\n            \"_id\": \"69aabdbd190fdc17dfff7cd2\",\n            \"email\": \"john@yopmail.com\",\n            \"firstName\": \"John\",\n            \"lastName\": \"Doe\"\n        },\n        \"chunkCount\": 15,\n        \"description\": \"Company handbook document\",\n        \"tags\": [\n            \"hr\",\n            \"handbook\"\n        ],\n        \"createdAt\": \"2026-03-06T12:10:56.410Z\",\n        \"updatedAt\": \"2026-03-06T12:11:06.190Z\",\n        \"__v\": 0,\n        \"pageCount\": 6\n    },\n    \"message\": \"Success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Document Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/:id/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "documents",
+                ":id",
+                "status"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "69aac71ccf5ce0f86b5c7d4d"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/documents/:id/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "documents",
+                    ":id",
+                    "status"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "69aac71ccf5ce0f86b5c7d4d"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "97"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "798"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "183"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"b7-ldCDh0il/0AlzWQS6dDNiZ9TNSw\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:23:19 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"69aac71ccf5ce0f86b5c7d4d\",\n        \"fileName\": \"Final+COmpany.pdf\",\n        \"status\": \"READY\",\n        \"chunkCount\": 15,\n        \"updatedAt\": \"2026-03-06T12:23:00.773Z\"\n    },\n    \"message\": \"Success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Reprocess Document(doesn't works now as we quickly deletes the documents from the server but we are supposed to keep them in a bucket and then process them again while reprocessing)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/:id/reprocess",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "documents",
+                ":id",
+                "reprocess"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "69aac71ccf5ce0f86b5c7d4d"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Document",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/documents/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "documents",
+                ":id"
+              ],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "69aac4509307eb24d359825a"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/documents/:id",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "documents",
+                    ":id"
+                  ],
+                  "variable": [
+                    {
+                      "key": "id",
+                      "value": "69aac4509307eb24d359825a"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "99"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "900"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "94"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"5e-sfUCMDYAaewTamgrrJ3NrIvQw8k\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:21:41 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": null,\n    \"message\": \"Document \\\"Final+COmpany.pdf\\\" deleted successfully\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Create Chat Session",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"What is the company policy?\",\n  \"documentIds\": [\"69aac71ccf5ce0f86b5c7d4d\"]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chat/sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chat",
+                "sessions"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "201",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"title\": \"What is the company policy?\",\n  \"documentIds\": [\"69aac71ccf5ce0f86b5c7d4d\"]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/chat/sessions",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "sessions"
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "84"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "85"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "319"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"13f-vaXH7qipkI82D4EdG2b632drqQE\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:35:12 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 201,\n    \"data\": {\n        \"userId\": \"69aabdbd190fdc17dfff7cd2\",\n        \"title\": \"What is the company policy?\",\n        \"totalTokensUsed\": 0,\n        \"_id\": \"69aaca00cf5ce0f86b5c7d89\",\n        \"messages\": [],\n        \"createdAt\": \"2026-03-06T12:35:12.599Z\",\n        \"updatedAt\": \"2026-03-06T12:35:12.599Z\",\n        \"__v\": 0,\n        \"id\": \"69aaca00cf5ce0f86b5c7d89\"\n    },\n    \"message\": \"Chat session created\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Chat Sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chat/sessions?page=1&limit=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chat",
+                "sessions"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/sessions?page=1&limit=20",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "sessions"
+                  ],
+                  "query": [
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "83"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "65"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "434"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1b2-63Qn/4I8r+y1sSioXuIEk92p6Fg\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:35:33 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"sessions\": [\n            {\n                \"_id\": \"69aaca00cf5ce0f86b5c7d89\",\n                \"title\": \"What is the company policy?\",\n                \"totalTokensUsed\": 0,\n                \"createdAt\": \"2026-03-06T12:35:12.599Z\",\n                \"updatedAt\": \"2026-03-06T12:35:12.599Z\"\n            },\n            {\n                \"_id\": \"69aac80acf5ce0f86b5c7d6c\",\n                \"title\": \"What is the company policy?\",\n                \"totalTokensUsed\": 713,\n                \"createdAt\": \"2026-03-06T12:26:50.890Z\",\n                \"updatedAt\": \"2026-03-06T12:27:44.904Z\"\n            }\n        ],\n        \"total\": 2,\n        \"page\": 1,\n        \"limit\": 20\n    },\n    \"message\": \"Success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Chat Session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chat/sessions/:sessionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chat",
+                "sessions",
+                ":sessionId"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "69aaca00cf5ce0f86b5c7d89"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/sessions/:sessionId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "sessions",
+                    ":sessionId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "sessionId",
+                      "value": "69aaca00cf5ce0f86b5c7d89"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "99"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "900"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "274"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"112-RIAPe9B2iQSyQFe2HGIO/XfnFbE\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:36:52 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": {\n        \"_id\": \"69aaca00cf5ce0f86b5c7d89\",\n        \"userId\": \"69aabdbd190fdc17dfff7cd2\",\n        \"title\": \"What is the company policy?\",\n        \"totalTokensUsed\": 0,\n        \"messages\": [],\n        \"createdAt\": \"2026-03-06T12:35:12.599Z\",\n        \"updatedAt\": \"2026-03-06T12:35:12.599Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Success\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send Message(It streams the response)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Can you summarize the handbook?\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/chat/sessions/:sessionId/messages",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chat",
+                "sessions",
+                ":sessionId",
+                "messages"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "69aac80acf5ce0f86b5c7d6c"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Can you summarize the handbook?\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/chat/sessions/:sessionId/messages",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "sessions",
+                    ":sessionId",
+                    "messages"
+                  ],
+                  "variable": [
+                    {
+                      "key": "sessionId",
+                      "value": "69aac80acf5ce0f86b5c7d6c"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "93"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "541"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "X-Accel-Buffering",
+                  "value": "no"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "br"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:27:36 GMT"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "event: sources\ndata: {\"sources\":[{\"documentId\":\"69aac71ccf5ce0f86b5c7d4d\",\"fileName\":\"Final+COmpany.pdf\",\"chunkText\":\" The company has established an Internal Complaints Committee (ICC) in line with the\\nPOSH Act.\\n Any female employee facing harassment can confidentially approach HR or ICC\\nmembers.\\n Complaints will be handled with fairness, sensitivity, and strict confidentiality.\\nAcknowledgment\\nI acknowledge tha\",\"chunkIndex\":13},{\"documentId\":\"69aac71ccf5ce0f86b5c7d4d\",\"fileName\":\"Final+COmpany.pdf\",\"chunkText\":\"📘 Company Policy Manual\\n1. Employment\\n1.1 Probation Period\\n All new employees will undergo a 180-day probation period.\\n Confirmation of employment is subject to successful completion of probation.\\n1.2 Service Agreement (Interns)\\n Interns must sign a minimum 18-month employment agreement with the\",\"chunkIndex\":0},{\"documentId\":\"69aac71ccf5ce0f86b5c7d4d\",\"fileName\":\"Final+COmpany.pdf\",\"chunkText\":\"-- 1 of 6 --\",\"chunkIndex\":2},{\"documentId\":\"69aac71ccf5ce0f86b5c7d4d\",\"fileName\":\"Final+COmpany.pdf\",\"chunkText\":\"-- 2 of 6 --\",\"chunkIndex\":5},{\"documentId\":\"69aac71ccf5ce0f86b5c7d4d\",\"fileName\":\"Final+COmpany.pdf\",\"chunkText\":\"-- 3 of 6 --\",\"chunkIndex\":8}]}\n\nevent: token\ndata: {\"token\":\"The\"}\n\nevent: token\ndata: {\"token\":\" company\"}\n\nevent: token\ndata: {\"token\":\" handbook\"}\n\nevent: token\ndata: {\"token\":\" outlines\"}\n\nevent: token\ndata: {\"token\":\" key\"}\n\nevent: token\ndata: {\"token\":\" policies\"}\n\nevent: token\ndata: {\"token\":\" regarding\"}\n\nevent: token\ndata: {\"token\":\" employment\"}\n\nevent: token\ndata: {\"token\":\" and\"}\n\nevent: token\ndata: {\"token\":\" workplace\"}\n\nevent: token\ndata: {\"token\":\" conduct\"}\n\nevent: token\ndata: {\"token\":\".\"}\n\nevent: token\ndata: {\"token\":\" \\n\\n\"}\n\nevent: token\ndata: {\"token\":\"1\"}\n\nevent: token\ndata: {\"token\":\".\"}\n\nevent: token\ndata: {\"token\":\" **\"}\n\nevent: token\ndata: {\"token\":\"Internal\"}\n\nevent: token\ndata: {\"token\":\" Compl\"}\n\nevent: token\ndata: {\"token\":\"aints\"}\n\nevent: token\ndata: {\"token\":\" Committee\"}\n\nevent: token\ndata: {\"token\":\" (\"}\n\nevent: token\ndata: {\"token\":\"ICC\"}\n\nevent: token\ndata: {\"token\":\")**\"}\n\nevent: token\ndata: {\"token\":\":\"}\n\nevent: token\ndata: {\"token\":\" Established\"}\n\nevent: token\ndata: {\"token\":\" in\"}\n\nevent: token\ndata: {\"token\":\" accordance\"}\n\nevent: token\ndata: {\"token\":\" with\"}\n\nevent: token\ndata: {\"token\":\" the\"}\n\nevent: token\ndata: {\"token\":\" POS\"}\n\nevent: token\ndata: {\"token\":\"H\"}\n\nevent: token\ndata: {\"token\":\" Act\"}\n\nevent: token\ndata: {\"token\":\",\"}\n\nevent: token\ndata: {\"token\":\" it\"}\n\nevent: token\ndata: {\"token\":\" allows\"}\n\nevent: token\ndata: {\"token\":\" female\"}\n\nevent: token\ndata: {\"token\":\" employees\"}\n\nevent: token\ndata: {\"token\":\" facing\"}\n\nevent: token\ndata: {\"token\":\" harassment\"}\n\nevent: token\ndata: {\"token\":\" to\"}\n\nevent: token\ndata: {\"token\":\" confidential\"}\n\nevent: token\ndata: {\"token\":\"ly\"}\n\nevent: token\ndata: {\"token\":\" approach\"}\n\nevent: token\ndata: {\"token\":\" HR\"}\n\nevent: token\ndata: {\"token\":\" or\"}\n\nevent: token\ndata: {\"token\":\" ICC\"}\n\nevent: token\ndata: {\"token\":\" members\"}\n\nevent: token\ndata: {\"token\":\".\"}\n\nevent: token\ndata: {\"token\":\" Compl\"}\n\nevent: token\ndata: {\"token\":\"aints\"}\n\nevent: token\ndata: {\"token\":\" are\"}\n\nevent: token\ndata: {\"token\":\" handled\"}\n\nevent: token\ndata: {\"token\":\" with\"}\n\nevent: token\ndata: {\"token\":\" fairness\"}\n\nevent: token\ndata: {\"token\":\",\"}\n\nevent: token\ndata: {\"token\":\" sensitivity\"}\n\nevent: token\ndata: {\"token\":\",\"}\n\nevent: token\ndata: {\"token\":\" and\"}\n\nevent: token\ndata: {\"token\":\" confidentiality\"}\n\nevent: token\ndata: {\"token\":\".\\n\\n\"}\n\nevent: token\ndata: {\"token\":\"2\"}\n\nevent: token\ndata: {\"token\":\".\"}\n\nevent: token\ndata: {\"token\":\" **\"}\n\nevent: token\ndata: {\"token\":\"Employment\"}\n\nevent: token\ndata: {\"token\":\" Policies\"}\n\nevent: token\ndata: {\"token\":\"**\"}\n\nevent: token\ndata: {\"token\":\":\\n\"}\n\nevent: token\ndata: {\"token\":\"  \"}\n\nevent: token\ndata: {\"token\":\" -\"}\n\nevent: token\ndata: {\"token\":\" **\"}\n\nevent: token\ndata: {\"token\":\"Prob\"}\n\nevent: token\ndata: {\"token\":\"ation\"}\n\nevent: token\ndata: {\"token\":\" Period\"}\n\nevent: token\ndata: {\"token\":\"**\"}\n\nevent: token\ndata: {\"token\":\":\"}\n\nevent: token\ndata: {\"token\":\" New\"}\n\nevent: token\ndata: {\"token\":\" employees\"}\n\nevent: token\ndata: {\"token\":\" undergo\"}\n\nevent: token\ndata: {\"token\":\" a\"}\n\nevent: token\ndata: {\"token\":\" \"}\n\nevent: token\ndata: {\"token\":\"180\"}\n\nevent: token\ndata: {\"token\":\"-day\"}\n\nevent: token\ndata: {\"token\":\" probation\"}\n\nevent: token\ndata: {\"token\":\" period\"}\n\nevent: token\ndata: {\"token\":\",\"}\n\nevent: token\ndata: {\"token\":\" with\"}\n\nevent: token\ndata: {\"token\":\" confirmation\"}\n\nevent: token\ndata: {\"token\":\" of\"}\n\nevent: token\ndata: {\"token\":\" employment\"}\n\nevent: token\ndata: {\"token\":\" contingent\"}\n\nevent: token\ndata: {\"token\":\" on\"}\n\nevent: token\ndata: {\"token\":\" successful\"}\n\nevent: token\ndata: {\"token\":\" completion\"}\n\nevent: token\ndata: {\"token\":\".\\n\"}\n\nevent: token\ndata: {\"token\":\"  \"}\n\nevent: token\ndata: {\"token\":\" -\"}\n\nevent: token\ndata: {\"token\":\" **\"}\n\nevent: token\ndata: {\"token\":\"Service\"}\n\nevent: token\ndata: {\"token\":\" Agreement\"}\n\nevent: token\ndata: {\"token\":\" for\"}\n\nevent: token\ndata: {\"token\":\" Intern\"}\n\nevent: token\ndata: {\"token\":\"s\"}\n\nevent: token\ndata: {\"token\":\"**\"}\n\nevent: token\ndata: {\"token\":\":\"}\n\nevent: token\ndata: {\"token\":\" Intern\"}\n\nevent: token\ndata: {\"token\":\"s\"}\n\nevent: token\ndata: {\"token\":\" must\"}\n\nevent: token\ndata: {\"token\":\" sign\"}\n\nevent: token\ndata: {\"token\":\" an\"}\n\nevent: token\ndata: {\"token\":\" \"}\n\nevent: token\ndata: {\"token\":\"18\"}\n\nevent: token\ndata: {\"token\":\"-month\"}\n\nevent: token\ndata: {\"token\":\" employment\"}\n\nevent: token\ndata: {\"token\":\" agreement\"}\n\nevent: token\ndata: {\"token\":\".\\n\"}\n\nevent: token\ndata: {\"token\":\"  \"}\n\nevent: token\ndata: {\"token\":\" -\"}\n\nevent: token\ndata: {\"token\":\" **\"}\n\nevent: token\ndata: {\"token\":\"Document\"}\n\nevent: token\ndata: {\"token\":\" Submission\"}\n\nevent: token\ndata: {\"token\":\"**\"}\n\nevent: token\ndata: {\"token\":\":\"}\n\nevent: token\ndata: {\"token\":\" Employees\"}\n\nevent: token\ndata: {\"token\":\" must\"}\n\nevent: token\ndata: {\"token\":\" submit\"}\n\nevent: token\ndata: {\"token\":\" all\"}\n\nevent: token\ndata: {\"token\":\" required\"}\n\nevent: token\ndata: {\"token\":\" documents\"}\n\nevent: token\ndata: {\"token\":\" within\"}\n\nevent: token\ndata: {\"token\":\" the\"}\n\nevent: token\ndata: {\"token\":\" specified\"}\n\nevent: token\ndata: {\"token\":\" timeframe\"}\n\nevent: token\ndata: {\"token\":\".\"}\n\nevent: token\ndata: {\"token\":\" The\"}\n\nevent: token\ndata: {\"token\":\" company\"}\n\nevent: token\ndata: {\"token\":\" may\"}\n\nevent: token\ndata: {\"token\":\" verify\"}\n\nevent: token\ndata: {\"token\":\" these\"}\n\nevent: token\ndata: {\"token\":\" documents\"}\n\nevent: token\ndata: {\"token\":\",\"}\n\nevent: token\ndata: {\"token\":\" and\"}\n\nevent: token\ndata: {\"token\":\" any\"}\n\nevent: token\ndata: {\"token\":\" false\"}\n\nevent: token\ndata: {\"token\":\" information\"}\n\nevent: token\ndata: {\"token\":\" can\"}\n\nevent: token\ndata: {\"token\":\" lead\"}\n\nevent: token\ndata: {\"token\":\" to\"}\n\nevent: token\ndata: {\"token\":\" disciplinary\"}\n\nevent: token\ndata: {\"token\":\" action\"}\n\nevent: token\ndata: {\"token\":\",\"}\n\nevent: token\ndata: {\"token\":\" including\"}\n\nevent: token\ndata: {\"token\":\" termination\"}\n\nevent: token\ndata: {\"token\":\".\\n\\n\"}\n\nevent: token\ndata: {\"token\":\"3\"}\n\nevent: token\ndata: {\"token\":\".\"}\n\nevent: token\ndata: {\"token\":\" **\"}\n\nevent: token\ndata: {\"token\":\"Code\"}\n\nevent: token\ndata: {\"token\":\" of\"}\n\nevent: token\ndata: {\"token\":\" Conduct\"}\n\nevent: token\ndata: {\"token\":\" &\"}\n\nevent: token\ndata: {\"token\":\" Workplace\"}\n\nevent: token\ndata: {\"token\":\" Ethics\"}\n\nevent: token\ndata: {\"token\":\"**\"}\n\nevent: token\ndata: {\"token\":\":\"}\n\nevent: token\ndata: {\"token\":\" Employees\"}\n\nevent: token\ndata: {\"token\":\" are\"}\n\nevent: token\ndata: {\"token\":\" expected\"}\n\nevent: token\ndata: {\"token\":\" to\"}\n\nevent: token\ndata: {\"token\":\" maintain\"}\n\nevent: token\ndata: {\"token\":\" professional\"}\n\nevent: token\ndata: {\"token\":\" behavior\"}\n\nevent: token\ndata: {\"token\":\" with\"}\n\nevent: token\ndata: {\"token\":\" colleagues\"}\n\nevent: token\ndata: {\"token\":\",\"}\n\nevent: token\ndata: {\"token\":\" clients\"}\n\nevent: token\ndata: {\"token\":\",\"}\n\nevent: token\ndata: {\"token\":\" and\"}\n\nevent: token\ndata: {\"token\":\" partners\"}\n\nevent: token\ndata: {\"token\":\".\\n\\n\"}\n\nevent: token\ndata: {\"token\":\"[\"}\n\nevent: token\ndata: {\"token\":\"Source\"}\n\nevent: token\ndata: {\"token\":\":\"}\n\nevent: token\ndata: {\"token\":\" Final\"}\n\nevent: token\ndata: {\"token\":\"+\"}\n\nevent: token\ndata: {\"token\":\"CO\"}\n\nevent: token\ndata: {\"token\":\"mp\"}\n\nevent: token\ndata: {\"token\":\"any\"}\n\nevent: token\ndata: {\"token\":\".pdf\"}\n\nevent: token\ndata: {\"token\":\"]\"}\n\nevent: done\ndata: {\"status\":\"complete\"}\n\n"
+            },
+            {
+              "name": "200(But Not Chat Session Exist Case)",
+              "originalRequest": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"message\": \"Can you summarize the handbook?\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/chat/sessions/:sessionId/messages",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "sessions",
+                    ":sessionId",
+                    "messages"
+                  ],
+                  "variable": [
+                    {
+                      "key": "sessionId",
+                      "value": "69aac80acf5ce0f86b5c7d6c"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "81"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "31"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "text/event-stream"
+                },
+                {
+                  "key": "Cache-Control",
+                  "value": "no-cache"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "X-Accel-Buffering",
+                  "value": "no"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Content-Encoding",
+                  "value": "br"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:36:06 GMT"
+                },
+                {
+                  "key": "Transfer-Encoding",
+                  "value": "chunked"
+                }
+              ],
+              "cookie": [],
+              "body": "event: error\ndata: {\"message\":\"Chat session not found\"}\n\n"
+            }
+          ]
+        },
+        {
+          "name": "Delete Chat Session",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/chat/sessions/:sessionId",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "chat",
+                "sessions",
+                ":sessionId"
+              ],
+              "variable": [
+                {
+                  "key": "sessionId",
+                  "value": "69aac80acf5ce0f86b5c7d6c"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/chat/sessions/:sessionId",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "chat",
+                    "sessions",
+                    ":sessionId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "sessionId",
+                      "value": "69aac80acf5ce0f86b5c7d6c"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Content-Security-Policy",
+                  "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Resource-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Origin-Agent-Cluster",
+                  "value": "?1"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "no-referrer"
+                },
+                {
+                  "key": "Strict-Transport-Security",
+                  "value": "max-age=31536000; includeSubDomains"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "X-DNS-Prefetch-Control",
+                  "value": "off"
+                },
+                {
+                  "key": "X-Download-Options",
+                  "value": "noopen"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "SAMEORIGIN"
+                },
+                {
+                  "key": "X-Permitted-Cross-Domain-Policies",
+                  "value": "none"
+                },
+                {
+                  "key": "X-XSS-Protection",
+                  "value": "0"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Access-Control-Allow-Credentials",
+                  "value": "true"
+                },
+                {
+                  "key": "RateLimit-Policy",
+                  "value": "100;w=900"
+                },
+                {
+                  "key": "RateLimit-Limit",
+                  "value": "100"
+                },
+                {
+                  "key": "RateLimit-Remaining",
+                  "value": "82"
+                },
+                {
+                  "key": "RateLimit-Reset",
+                  "value": "45"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "58"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"3a-DPGhM1L9Tc+1sBgXAoK2AjB0qVs\""
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept-Encoding"
+                },
+                {
+                  "key": "Date",
+                  "value": "Fri, 06 Mar 2026 12:35:53 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"statusCode\": 200,\n    \"data\": null,\n    \"message\": \"Session deleted\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "YOUR_ACCESS_TOKEN",
+      "type": "string"
+    }
+  ]
+}
