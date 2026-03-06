@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { config } from "@config/env";
 import logger from "@utils/logger.util";
-import { parseFile } from "@utils/fileParser.util";
+import { parseFile, deleteFile } from "@utils/fileParser.util";
 
 import { DocumentModel, DocumentStatus } from "@models/Document.model";
 import { DocumentChunk } from "@models/DocumentChunk.model";
@@ -114,6 +114,9 @@ export async function ingestDocument(documentId: string): Promise<void> {
         logger.info(
             `[Ingestion] ✅ Completed: ${doc.fileName} — ${chunks.length} chunks indexed`,
         );
+
+        // ── Step 7: Cleanup (delete uploaded file) ───────────────────────────────
+        deleteFile(doc.filePath);
     } catch (err: unknown) {
         const message = err instanceof Error ? err.message : "Unknown ingestion error";
         logger.error(`[Ingestion] ❌ Failed for ${doc.fileName}: ${message}`, err);

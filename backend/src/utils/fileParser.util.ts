@@ -1,7 +1,7 @@
 // src/utils/fileParser.util.ts
 import fs from "fs";
 import path from "path";
-const pdfParse = require('pdf-parse');
+const { PDFParse: pdfParse } = require('pdf-parse');
 import logger from "@utils/logger.util";
 
 export interface ParsedFile {
@@ -38,11 +38,14 @@ export async function parseFile(
 
 async function parsePdf(filePath: string): Promise<ParsedFile> {
     const buffer = fs.readFileSync(filePath);
-    const data = await pdfParse(buffer);
+    const parser = new pdfParse({ data: buffer });
+    const textResult = await parser.getText();
+    const infoResult = await parser.getInfo();
+
     return {
-        text: data.text,
-        pageCount: data.numpages,
-        metadata: { info: data.info },
+        text: textResult.text,
+        pageCount: textResult.total,
+        metadata: { info: infoResult.info },
     };
 }
 
