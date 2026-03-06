@@ -1,0 +1,25 @@
+export enum UserRole {
+  ADMIN = "ADMIN",
+  MANAGER = "MANAGER",
+  STAFF = "STAFF"
+}
+
+export enum EntityStatus {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  DELETED = "DELETED",
+}
+
+export enum AuditAction {
+  CREATE = "CREATE",
+  UPDATE = "UPDATE",
+  DELETE = "DELETE",
+  LOGIN = "LOGIN",
+  LOGOUT = "LOGOUT",
+  ASSIGN = "ASSIGN",
+  UNASSIGN = "UNASSIGN",
+  REQUEST_RESET_PASSWORD = "REQUEST_RESET_PASSWORD",
+  RESET_PASSWORD = "RESET_PASSWORD",
+  INVITE = "INVITE",
+  ACCEPT_INVITE = "ACCEPT_INVITE",
+}
