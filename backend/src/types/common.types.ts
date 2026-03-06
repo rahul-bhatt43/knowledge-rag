@@ -10,6 +10,13 @@ export enum EntityStatus {
   DELETED = "DELETED",
 }
 
+export enum DocumentStatus {
+  PENDING = "PENDING",
+  PROCESSING = "PROCESSING",
+  READY = "READY",
+  FAILED = "FAILED",
+}
+
 export enum AuditAction {
   CREATE = "CREATE",
   UPDATE = "UPDATE",
@@ -22,4 +29,7 @@ export enum AuditAction {
   RESET_PASSWORD = "RESET_PASSWORD",
   INVITE = "INVITE",
   ACCEPT_INVITE = "ACCEPT_INVITE",
+  DOCUMENT_UPLOAD = "DOCUMENT_UPLOAD",
+  DOCUMENT_DELETE = "DOCUMENT_DELETE",
+  DOCUMENT_REPROCESS = "DOCUMENT_REPROCESS",
 }

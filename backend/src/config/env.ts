@@ -39,19 +39,24 @@ export const env = {
   smtpPass: process.env.SMTP_PASS || "",
   smtpFromEmail: process.env.SMTP_FROM_EMAIL || "",
   smtpSecure: process.env.SMTP_SECURE === "true",
+
+  // AI / Vector DB
+  openaiApiKey: process.env.OPENAI_API_KEY || "",
+  pineconeApiKey: process.env.PINECONE_API_KEY || "",
+  pineconeIndexName: process.env.PINECONE_INDEX_NAME || "company-knowledge",
+  uploadDir: process.env.UPLOAD_DIR || "uploads",
 };
 
 // or
 
 export const config = {
   env: process.env.NODE_ENV || "development",
-  port: parseInt(process.env.PORT || "5000", 10),
+  port: parseInt(process.env.PORT || "3000", 10),
   apiVersion: process.env.API_VERSION || "v1",
 
   database: {
-    uri:
-      process.env.MONGODB_URI || "mongodb://localhost:27017/events-management",
-    dbName: process.env.MONGODB_DB_NAME || "events-management",
+    uri: process.env.MONGODB_URI || "mongodb://localhost:27017/company-knowledge",
+    dbName: process.env.MONGODB_DB_NAME || "company-knowledge",
   },
 
   jwt: {
@@ -95,5 +100,39 @@ export const config = {
   sendgrid: {
     apiKey: process.env.SENDGRID_API_KEY || "",
     fromEmail: process.env.SENDGRID_FROM_EMAIL || process.env.SMTP_FROM_EMAIL || "",
+  },
+
+  ai: {
+    openaiApiKey: process.env.OPENAI_API_KEY || "",
+    embeddingModel: "text-embedding-ada-002",
+    chatModel: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
+    maxRetries: 3,
+    chunkSize: 1000,
+    chunkOverlap: 200,
+    topK: 5,
+  },
+
+  pinecone: {
+    apiKey: process.env.PINECONE_API_KEY || "",
+    indexName: process.env.PINECONE_INDEX_NAME || "company-knowledge",
+    namespace: process.env.PINECONE_NAMESPACE || "default",
+  },
+
+  upload: {
+    dir: process.env.UPLOAD_DIR || "uploads",
+    maxFileSizeMb: parseInt(process.env.MAX_FILE_SIZE_MB || "50", 10),
+    allowedMimeTypes: [
+      "application/pdf",
+      "text/plain",
+      "text/markdown",
+      "text/html",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ],
+  },
+
+  bullmq: {
+    redisUrl: process.env.BULLMQ_REDIS_URL || "",
+    enabled: !!process.env.BULLMQ_REDIS_URL && process.env.BULLMQ_REDIS_URL !== "redis://localhost:6379",
   },
 };
