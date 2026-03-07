@@ -47,14 +47,14 @@ export function Header() {
     };
 
     return (
-        <header className="h-16 flex items-center justify-between px-8 border-b border-border backdrop-blur-md bg-background/50 sticky top-0 z-40 gap-8">
+        <header className="h-14 flex items-center justify-between px-6 border-b border-white/5 backdrop-blur-md bg-background/50 sticky top-0 z-40 gap-8">
             <div className="flex items-center flex-1 min-w-0">
                 {sessionTitle && (
-                    <div className="flex items-center gap-3 animate-in fade-in slide-in-from-left-4 duration-500 group/title">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
-                            <MessageSquare className="w-4 h-4 text-primary" />
+                    <div className="flex items-center gap-2 animate-in fade-in slide-in-from-left-4 duration-500 group/title">
+                        <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
+                            <MessageSquare className="w-3.5 h-3.5 text-primary" />
                         </div>
-                        <ChevronRight className="w-3 h-3 text-muted-foreground/40 shrink-0" />
+                        <ChevronRight className="w-3 h-3 text-muted-foreground/30 shrink-0" />
 
                         {isEditing ? (
                             <div className="flex items-center gap-2">
@@ -65,36 +65,37 @@ export function Header() {
                                     onKeyDown={handleKeyDown}
                                     onBlur={handleEditSave}
                                     disabled={isSaving}
-                                    className="bg-background/50 border border-primary/50 rounded px-2 py-1 text-sm font-bold text-foreground outline-none focus:ring-2 focus:ring-primary/20 w-64"
+                                    className="bg-foreground/5 border border-primary/30 rounded-lg px-3 py-1 text-xs font-semibold text-foreground outline-none focus:ring-2 focus:ring-primary/20 w-64 transition-all"
                                 />
                                 {isSaving && <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />}
                             </div>
                         ) : (
-                            <div className="flex items-center gap-2 max-w-md cursor-pointer" onClick={() => { setEditTitle(sessionTitle || ""); setIsEditing(true); }}>
-                                <h2 className="text-sm font-bold text-foreground truncate selection:bg-transparent">
+                            <div
+                                className="flex items-center gap-2 max-w-md cursor-pointer group/title-text"
+                                onClick={() => { setEditTitle(sessionTitle || ""); setIsEditing(true); }}
+                            >
+                                <h2 className="text-xs font-bold text-foreground/80 group-hover/title-text:text-foreground truncate selection:bg-transparent transition-colors">
                                     {sessionTitle}
                                 </h2>
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); setEditTitle(sessionTitle || ""); setIsEditing(true); }}
-                                    className="opacity-0 group-hover/title:opacity-100 p-1 hover:bg-foreground/5 rounded transition-all text-muted-foreground hover:text-foreground"
-                                >
-                                    <Edit2 className="w-3 h-3" />
-                                </button>
+                                <Edit2 className="w-2.5 h-2.5 text-muted-foreground/40 group-hover/title-text:text-primary opacity-0 group-hover/title-text:opacity-100 transition-all" />
                             </div>
                         )}
                     </div>
                 )}
             </div>
 
-            <div className="flex items-center gap-4 shrink-0">
-                <ThemeToggle />
-                <button className="p-2 rounded-full hover:bg-foreground/5 text-muted-foreground relative transition-colors">
-                    <Bell className="w-5 h-5" />
-                    <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-background" />
-                </button>
-                <button className="p-2 rounded-full hover:bg-foreground/5 text-muted-foreground transition-colors">
-                    <Settings className="w-5 h-5" />
-                </button>
+            <div className="flex items-center gap-3 shrink-0">
+                <div className="flex items-center bg-foreground/5 rounded-full px-1.5 py-1 border border-border/50">
+                    <ThemeToggle />
+                    <div className="w-px h-4 bg-border/50 mx-1" />
+                    <button className="p-1.5 rounded-full hover:bg-foreground/10 text-muted-foreground hover:text-foreground relative transition-all">
+                        <Bell className="w-4 h-4" />
+                        <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-primary rounded-full ring-2 ring-background animate-pulse" />
+                    </button>
+                    <button className="p-1.5 rounded-full hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-all">
+                        <Settings className="w-4 h-4" />
+                    </button>
+                </div>
             </div>
         </header>
     );

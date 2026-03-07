@@ -124,17 +124,17 @@ export function Sidebar() {
             </div>
 
             {/* Action Button */}
-            <div className="px-4 mb-6 shrink-0">
+            <div className="px-4 mb-6 shrink-0 relative group">
                 <button
                     onClick={handleCreateSession}
                     disabled={creatingSession}
                     className={cn(
-                        "w-full bg-primary text-primary-foreground rounded-xl flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-primary/10 overflow-hidden shrink-0 disabled:opacity-50",
+                        "w-full bg-linear-to-br from-primary to-primary/80 text-primary-foreground rounded-xl flex items-center gap-2 transition-all hover:shadow-[0_8px_30px_rgb(var(--primary-rgb),0.3)] active:scale-[0.98] overflow-hidden shrink-0 disabled:opacity-50 group-hover:-translate-y-px",
                         collapsed ? "h-12 w-12 mx-auto justify-center" : "h-11 px-4 justify-center"
                     )}
                 >
-                    {creatingSession ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5 shrink-0" />}
-                    {!collapsed && <span className="text-sm font-semibold">New Session</span>}
+                    {creatingSession ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5 shrink-0 group-hover:rotate-90 transition-transform duration-300" />}
+                    {!collapsed && <span className="text-sm font-bold tracking-tight">New Session</span>}
                 </button>
             </div>
 
@@ -144,13 +144,18 @@ export function Sidebar() {
                     <Link
                         href="/"
                         className={cn(
-                            "flex items-center h-11 rounded-xl transition-all group relative overflow-hidden text-sm font-medium",
+                            "flex items-center h-10 rounded-xl transition-all group relative overflow-hidden text-sm font-medium",
                             collapsed ? "justify-center" : "gap-3 px-3",
-                            pathname === "/" && !activeSessionId ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                            pathname === "/" && !activeSessionId
+                                ? "bg-primary/10 text-primary shadow-[inset_0_1px_1px_rgba(var(--primary-rgb),0.05)] border border-primary/20"
+                                : "text-muted-foreground hover:text-foreground hover:bg-foreground/5 border border-transparent"
                         )}
                     >
-                        <MessageSquare className="w-5 h-5 shrink-0" />
+                        <MessageSquare className={cn("w-5 h-5 shrink-0 transition-transform group-hover:scale-110", pathname === "/" && !activeSessionId && "text-primary")} />
                         {!collapsed && <span>Global Assistant</span>}
+                        {pathname === "/" && !activeSessionId && !collapsed && (
+                            <div className="absolute right-3 w-1 h-4 bg-primary rounded-full animate-in fade-in duration-500" />
+                        )}
                     </Link>
 
                     {navItems.map((item) => {
@@ -162,13 +167,18 @@ export function Sidebar() {
                                 key={item.href}
                                 href={item.href}
                                 className={cn(
-                                    "flex items-center h-11 rounded-xl transition-all group relative overflow-hidden text-sm font-medium",
+                                    "flex items-center h-10 rounded-xl transition-all group relative overflow-hidden text-sm font-medium",
                                     collapsed ? "justify-center" : "gap-3 px-3",
-                                    active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                                    active
+                                        ? "bg-primary/10 text-primary shadow-[inset_0_1px_1px_rgba(var(--primary-rgb),0.05)] border border-primary/20"
+                                        : "text-muted-foreground hover:text-foreground hover:bg-foreground/5 border border-transparent"
                                 )}
                             >
                                 <item.icon className={cn("w-5 h-5 shrink-0 transition-transform group-hover:scale-110", active && "text-primary")} />
                                 {!collapsed && <span>{item.label}</span>}
+                                {active && !collapsed && (
+                                    <div className="absolute right-3 w-1 h-4 bg-primary rounded-full animate-in fade-in duration-500" />
+                                )}
                             </Link>
                         );
                     })}
@@ -183,14 +193,14 @@ export function Sidebar() {
                             </div>
 
                             {/* Session Search */}
-                            <div className="relative group">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                            <div className="relative group/search">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/50 group-focus-within/search:text-primary transition-colors" />
                                 <input
                                     type="text"
                                     placeholder="Search chats..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full h-9 bg-foreground/5 border border-border rounded-lg pl-9 pr-3 text-xs outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/10 transition-all placeholder:text-muted-foreground/30"
+                                    className="w-full h-9 bg-foreground/2 dark:bg-foreground/3 border border-border/50 rounded-xl pl-9 pr-3 text-[11px] outline-none focus:border-primary/30 focus:bg-background/50 focus:ring-4 focus:ring-primary/5 transition-all placeholder:text-muted-foreground/30"
                                 />
                             </div>
                         </div>
@@ -274,27 +284,27 @@ export function Sidebar() {
             </div>
 
             {/* Bottom Profile/Logout */}
-            <div className="p-4 mt-auto border-t border-white/5 space-y-2 shrink-0">
+            <div className="p-4 mt-auto border-t border-white/5 space-y-3 bg-linear-to-t from-background/80 to-transparent shrink-0">
                 <div className={cn(
-                    "flex items-center gap-3 p-2 rounded-xl bg-foreground/5",
+                    "flex items-center gap-3 p-2 rounded-2xl bg-foreground/5 border border-border/50 hover:bg-foreground/10 transition-colors cursor-pointer group/profile",
                     collapsed ? "justify-center" : "px-3"
                 )}>
-                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-primary to-primary/50 flex items-center justify-center text-xs font-bold text-white shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-linear-to-br from-primary to-primary/60 flex items-center justify-center text-[11px] font-bold text-white shrink-0 ring-2 ring-background shadow-lg shadow-primary/20 group-hover/profile:scale-105 transition-transform">
                         {user?.firstName?.[0]}
                     </div>
                     {!collapsed && (
                         <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold truncate text-foreground">{user?.firstName} {user?.lastName}</p>
-                            <p className="text-[10px] text-muted-foreground uppercase tracking-widest leading-none mt-1">{user?.role}</p>
+                            <p className="text-xs font-bold truncate text-foreground/90 group-hover/profile:text-foreground">{user?.firstName} {user?.lastName}</p>
+                            <p className="text-[9px] text-muted-foreground uppercase tracking-widest leading-none mt-1 font-medium">{user?.role}</p>
                         </div>
                     )}
                 </div>
                 {!collapsed && (
                     <button
                         onClick={logout}
-                        className="w-full flex items-center gap-3 px-3 h-10 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all text-sm font-medium"
+                        className="w-full flex items-center gap-3 px-3 h-9 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all text-xs font-semibold group/logout"
                     >
-                        <LogOut className="w-4 h-4" />
+                        <LogOut className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
                         Sign Out
                     </button>
                 )}
