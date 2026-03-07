@@ -28,7 +28,7 @@ export default function DashboardLayout({
 
     return (
         <ChatProvider>
-            <div className="flex h-screen bg-background text-foreground overflow-hidden relative">
+            <div className="flex h-dvh bg-background text-foreground overflow-hidden relative">
                 {/* Mobile Sidebar Overlay */}
                 {isSidebarOpen && (
                     <div

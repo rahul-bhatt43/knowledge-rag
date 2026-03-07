@@ -113,9 +113,20 @@ export function Sidebar({ isMobileOpen, onMobileClose }: { isMobileOpen?: boolea
             {/* Brand */}
             <div className="p-6 flex items-center justify-between shrink-0">
                 {!collapsed && (
-                    <h1 className="text-xl font-bold tracking-tighter text-gradient px-2">
-                        AI Knowledge
-                    </h1>
+                    <div className="flex items-center gap-2 px-2">
+                        <img
+                            src="/logo.png"
+                            alt="Logo"
+                            className="w-8 h-10 object-contain"
+                            onError={(e) => {
+                                // Fallback to PNG if SVG fails or just show text
+                                (e.target as HTMLImageElement).src = '/logo.png';
+                            }}
+                        />
+                        <h1 className="text-xl font-bold tracking-tighter text-gradient">
+                            AI Knowledge
+                        </h1>
+                    </div>
                 )}
                 <button
                     onClick={() => setCollapsed(!collapsed)}

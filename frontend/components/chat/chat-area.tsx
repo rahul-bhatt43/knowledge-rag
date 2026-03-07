@@ -397,21 +397,28 @@ export function ChatArea() {
                         </div>
                     </div>
                 ) : !sessionId ? (
-                    <div className="h-full flex flex-col items-center justify-center p-8 max-w-4xl mx-auto space-y-16 animate-in fade-in zoom-in duration-1000">
-                        <div className="text-center space-y-6">
-                            <div className="relative mx-auto w-24 h-24 mb-8">
+                    <div className="min-h-full flex flex-col items-center justify-start lg:justify-center p-4 lg:p-8 py-12 lg:py-20 max-w-4xl mx-auto space-y-8 lg:space-y-16 animate-in fade-in zoom-in duration-1000 ">
+                        <div className="text-center space-y-4 lg:space-y-6">
+                            <div className="relative mx-auto w-20 h-20 lg:w-24 lg:h-24 mb-4 lg:mb-8">
                                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-                                <div className="relative w-24 h-24 bg-foreground/5 border border-border rounded-3xl flex items-center justify-center shadow-2xl backdrop-blur-2xl">
-                                    <Sparkles className="w-12 h-12 text-primary animate-bounce fill-primary/10" />
+                                <div className="relative w-20 h-20 lg:w-24 lg:h-24 bg-foreground/5 border border-border rounded-2xl lg:rounded-3xl flex items-center justify-center shadow-xl lg:shadow-2xl backdrop-blur-2xl overflow-hidden p-3 lg:p-4">
+                                    <img
+                                        src="/logo.svg"
+                                        alt="AI Knowledge"
+                                        className="w-16 h-16 object-contain animate-in fade-in zoom-in duration-700"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).src = '/logo.png';
+                                        }}
+                                    />
                                 </div>
                             </div>
-                            <h2 className="text-3xl lg:text-5xl font-black tracking-tight text-foreground">Knowledge<span className="text-primary">Discovery</span></h2>
-                            <p className="text-muted-foreground max-w-md mx-auto text-base font-medium leading-relaxed opacity-60">
+                            <h2 className="text-2xl lg:text-5xl font-black tracking-tight text-foreground">Knowledge<span className="text-primary">Discovery</span></h2>
+                            <p className="text-muted-foreground max-w-md mx-auto text-sm lg:text-base font-medium leading-relaxed opacity-60 px-4">
                                 Harness the power of your institutional knowledge. Select documents below to prioritize specific data sources.
                             </p>
                         </div>
 
-                        <div className="w-full space-y-6">
+                        <div className="w-full space-y-4 lg:space-y-6">
                             <div className="flex items-center justify-between px-2">
                                 <div className="flex items-center gap-3">
                                     <BookOpen className="w-4 h-4 text-primary" />
@@ -438,20 +445,20 @@ export function ChatArea() {
                                                     );
                                                 }}
                                                 className={cn(
-                                                    "group relative p-4 rounded-2xl border transition-all duration-300 text-left backdrop-blur-sm",
+                                                    "group relative p-3 lg:p-4 rounded-xl lg:rounded-2xl border transition-all duration-300 text-left backdrop-blur-sm",
                                                     isSelected
                                                         ? "bg-primary/15 border-primary/50 shadow-[0_0_30px_rgba(var(--primary-rgb),0.1)]"
                                                         : "bg-foreground/2 border-border hover:border-foreground/20 hover:bg-foreground/5"
                                                 )}
                                             >
-                                                <div className="flex items-center gap-4">
+                                                <div className="flex items-center gap-3 lg:gap-4">
                                                     <div className={cn(
-                                                        "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300",
+                                                        "w-8 h-8 lg:w-10 lg:h-10 rounded-lg lg:rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300",
                                                         isSelected
                                                             ? "bg-primary border-primary shadow-lg shadow-primary/20 scale-110"
                                                             : "bg-foreground/5 border-border text-muted-foreground group-hover:scale-110"
                                                     )}>
-                                                        <Paperclip className={cn("w-5 h-5 transition-colors", isSelected ? "text-primary-foreground" : "opacity-40")} />
+                                                        <Paperclip className={cn("w-4 h-4 lg:w-5 lg:h-5 transition-colors", isSelected ? "text-primary-foreground" : "opacity-40")} />
                                                     </div>
                                                     <div className="flex-1 min-w-0">
                                                         <p className={cn("text-sm font-bold truncate transition-colors", isSelected ? "text-foreground" : "opacity-60")}>
@@ -492,10 +499,18 @@ export function ChatArea() {
                             >
                                 {/* Avatar section */}
                                 <div className={cn(
-                                    "w-8 h-8 lg:w-10 lg:h-10 rounded-xl lg:rounded-2xl flex items-center justify-center shrink-0 shadow-lg relative overflow-hidden",
-                                    message.role === "user" ? "bg-foreground/5 border border-border" : "bg-primary text-primary-foreground"
+                                    "w-8 h-8 lg:w-10 lg:h-10 rounded-xl lg:rounded-2xl flex items-center justify-center shrink-0 relative overflow-hidden",
+                                    message.role === "user" ? "bg-foreground/5 border border-border" : "bg-transparent p-0 lg:p-0"
                                 )}>
-                                    {message.role === "user" ? <User className="w-5 h-5 text-muted-foreground" /> : <Sparkles className="w-5 h-5 fill-primary-foreground/20" />}
+                                    {message.role === "user" ? (
+                                        <User className="w-5 h-5 text-muted-foreground" />
+                                    ) : (
+                                        <img
+                                            src="/logo.png"
+                                            alt="AI"
+                                            className="w-10 h-8"
+                                        />
+                                    )}
                                     {message.role === "assistant" && isTyping && message.id.startsWith("bot-") && !message.content && (
                                         <div className="absolute inset-0 bg-white/20 animate-pulse" />
                                     )}
@@ -620,7 +635,7 @@ export function ChatArea() {
                     )}>
                         <div className="absolute -inset-1 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
 
-                        <div className="relative glass rounded-[24px] lg:rounded-[32px] p-1.5 lg:p-2 border border-border/80 dark:border-primary/20 shadow-2xl focus-within:border-primary/50 transition-all bg-white dark:bg-foreground/[0.03] shadow-[inset_0_1px_1px_rgba(0,0,0,0.05)] dark:shadow-none">
+                        <div className="relative glass rounded-[24px] lg:rounded-[32px] p-1.5 lg:p-2 border border-border/80 dark:border-primary/20 shadow-2xl focus-within:border-primary/50 transition-all bg-white dark:bg-foreground/3 lg:shadow-[inset_0_1px_1px_rgba(0,0,0,0.05)]">
                             <div className="flex flex-col gap-2">
                                 {/* Optional Expandable Doc Manager within Input */}
                                 {sessionId && showDocManager && (
