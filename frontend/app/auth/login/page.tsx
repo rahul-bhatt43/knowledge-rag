@@ -58,6 +58,7 @@ export default function LoginPage() {
                                     <input
                                         type="email"
                                         required
+                                        suppressHydrationWarning
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
                                         className="w-full h-12 pl-10 pr-4 bg-foreground/5 border border-border rounded-xl outline-none transition-all focus:border-primary/50 focus:ring-4 focus:ring-primary/10 placeholder:text-muted-foreground/30 text-sm"
