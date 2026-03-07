@@ -1,5 +1,5 @@
-// export const API_BASE_URL = "http://localhost:8080/api/v1";
-export const API_BASE_URL = "https://g7gvt1l1-8080.inc1.devtunnels.ms/api/v1";
+export const API_BASE_URL = "http://localhost:8080/api/v1";
+// export const API_BASE_URL = "https://g7gvt1l1-8080.inc1.devtunnels.ms/api/v1";
 
 export class ApiService {
     private static async request<T>(
