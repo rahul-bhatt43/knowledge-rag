@@ -379,10 +379,22 @@ export function ChatArea() {
                 className="flex-1 overflow-y-auto p-8 pt-4 space-y-10 custom-scrollbar relative z-10"
             >
                 {loadingHistory ? (
-                    <div className="h-full flex items-center justify-center">
-                        <div className="flex flex-col items-center gap-4">
-                            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                            <p className="text-[10px] uppercase tracking-[0.3em] font-black opacity-20">Syncing History</p>
+                    <div className="space-y-10 animate-pulse">
+                        <div className="flex gap-6 max-w-4xl mx-auto flex-row-reverse ml-auto">
+                            <div className="w-10 h-10 rounded-2xl bg-foreground/10 shrink-0" />
+                            <div className="w-1/3 h-20 bg-foreground/10 rounded-4xl rounded-tr-none px-6" />
+                        </div>
+                        <div className="flex gap-6 max-w-4xl mx-auto mr-auto">
+                            <div className="w-10 h-10 rounded-2xl bg-primary/20 shrink-0" />
+                            <div className="flex-1 space-y-4 pt-2">
+                                <div className="w-full h-4 bg-foreground/5 rounded-full" />
+                                <div className="w-5/6 h-4 bg-foreground/5 rounded-full" />
+                                <div className="w-4/6 h-4 bg-foreground/5 rounded-full" />
+                            </div>
+                        </div>
+                        <div className="flex gap-6 max-w-4xl mx-auto flex-row-reverse ml-auto">
+                            <div className="w-10 h-10 rounded-2xl bg-foreground/10 shrink-0" />
+                            <div className="w-1/4 h-12 bg-foreground/10 rounded-4xl rounded-tr-none px-6" />
                         </div>
                     </div>
                 ) : !sessionId ? (

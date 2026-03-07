@@ -180,7 +180,6 @@ export function Sidebar() {
                         <div className="px-3 space-y-4">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Recent Chats</h2>
-                                {loadingSessions && <Loader2 className="w-3 h-3 animate-spin text-muted-foreground" />}
                             </div>
 
                             {/* Session Search */}
@@ -197,63 +196,74 @@ export function Sidebar() {
                         </div>
 
                         <div className="space-y-1 px-1">
-                            {sessions
-                                .filter(s => s.title.toLowerCase().includes(searchTerm.toLowerCase()))
-                                .map((session) => (
-                                    <Link
-                                        key={session._id}
-                                        href={`/?session=${session._id}`}
-                                        onClick={(e) => {
-                                            if (editingId === session._id) e.preventDefault();
-                                        }}
-                                        className={cn(
-                                            "flex items-center gap-3 px-3 h-10 rounded-lg transition-all group relative",
-                                            activeSessionId === session._id ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
-                                            editingId === session._id && "bg-foreground/10"
-                                        )}
-                                    >
-                                        <History className="w-4 h-4 shrink-0 text-muted-foreground group-hover:text-foreground transition-colors" />
+                            {loadingSessions ? (
+                                <div className="space-y-2 animate-pulse">
+                                    {[1, 2, 3, 4, 5].map((i) => (
+                                        <div key={i} className="flex items-center gap-3 px-3 h-10 rounded-lg bg-foreground/5">
+                                            <div className="w-4 h-4 rounded-sm bg-foreground/10 shrink-0" />
+                                            <div className="h-2.5 rounded-full bg-foreground/10 flex-1" style={{ width: `${Math.random() * 40 + 40}%` }} />
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                sessions
+                                    .filter((s: any) => s.title.toLowerCase().includes(searchTerm.toLowerCase()))
+                                    .map((session: any) => (
+                                        <Link
+                                            key={session._id}
+                                            href={`/?session=${session._id}`}
+                                            onClick={(e) => {
+                                                if (editingId === session._id) e.preventDefault();
+                                            }}
+                                            className={cn(
+                                                "flex items-center gap-3 px-3 h-10 rounded-lg transition-all group relative",
+                                                activeSessionId === session._id ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
+                                                editingId === session._id && "bg-foreground/10"
+                                            )}
+                                        >
+                                            <History className="w-4 h-4 shrink-0 text-muted-foreground group-hover:text-foreground transition-colors" />
 
-                                        {editingId === session._id ? (
-                                            <div className="flex-1 flex items-center min-w-0" onClick={e => e.preventDefault()}>
-                                                <input
-                                                    autoFocus
-                                                    value={editTitle}
-                                                    onChange={(e) => setEditTitle(e.target.value)}
-                                                    onKeyDown={(e) => handleKeyDown(e, session._id)}
-                                                    onBlur={() => handleSaveEdit()}
-                                                    disabled={isSaving}
-                                                    className="w-full bg-background/50 border border-primary/50 text-foreground text-xs rounded px-2 py-1 outline-none"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <span className="text-xs truncate w-[80%] ">{session.title}</span>
-                                        )}
+                                            {editingId === session._id ? (
+                                                <div className="flex-1 flex items-center min-w-0" onClick={e => e.preventDefault()}>
+                                                    <input
+                                                        autoFocus
+                                                        value={editTitle}
+                                                        onChange={(e) => setEditTitle(e.target.value)}
+                                                        onKeyDown={(e) => handleKeyDown(e, session._id)}
+                                                        onBlur={() => handleSaveEdit()}
+                                                        disabled={isSaving}
+                                                        className="w-full bg-background/50 border border-primary/50 text-foreground text-xs rounded px-2 py-1 outline-none"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <span className="text-xs truncate w-[80%] ">{session.title}</span>
+                                            )}
 
-                                        {editingId !== session._id && (
-                                            <div className="opacity-0 group-hover:opacity-100 flex items-center transition-all bg-background/50 backdrop-blur-sm px-1 rounded absolute right-2">
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        setEditingId(session._id);
-                                                        setEditTitle(session.title);
-                                                    }}
-                                                    className="p-1 hover:text-primary transition-all text-muted-foreground"
-                                                >
-                                                    <Edit2 className="w-3 h-3" />
-                                                </button>
-                                                <button
-                                                    onClick={(e) => handleDeleteSession(e, session._id)}
-                                                    className="p-1 hover:text-destructive transition-all text-muted-foreground"
-                                                >
-                                                    <Trash2 className="w-3 h-3" />
-                                                </button>
-                                            </div>
-                                        )}
-                                    </Link>
-                                ))}
-                            {!loadingSessions && sessions.filter(s => s.title.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
+                                            {editingId !== session._id && (
+                                                <div className="opacity-0 group-hover:opacity-100 flex items-center transition-all bg-background/50 backdrop-blur-sm px-1 rounded absolute right-2">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            setEditingId(session._id);
+                                                            setEditTitle(session.title);
+                                                        }}
+                                                        className="p-1 hover:text-primary transition-all text-muted-foreground"
+                                                    >
+                                                        <Edit2 className="w-3 h-3" />
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) => handleDeleteSession(e, session._id)}
+                                                        className="p-1 hover:text-destructive transition-all text-muted-foreground"
+                                                    >
+                                                        <Trash2 className="w-3 h-3" />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </Link>
+                                    ))
+                            )}
+                            {!loadingSessions && sessions.filter((s: any) => s.title.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (
                                 <p className="text-[10px] text-center text-muted-foreground/50 py-4 italic">
                                     {searchTerm ? "No results found" : "No recent chats"}
                                 </p>
