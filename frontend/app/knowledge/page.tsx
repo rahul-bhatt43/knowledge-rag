@@ -94,21 +94,33 @@ export default function KnowledgePage() {
 
     return (
         <DashboardLayout>
-            <div className="p-8 max-w-6xl mx-auto space-y-12 animate-in">
-                {/* Header */}
-                <div className="flex items-end justify-between">
-                    <div className="space-y-1">
-                        <h1 className="text-3xl font-bold tracking-tight text-gradient">Knowledge Base</h1>
-                        <p className="text-muted-foreground text-sm">Manage and upload documents for the RAG pipeline.</p>
+            <div className="p-8 max-w-6xl mx-auto space-y-12 animate-in fade-in duration-700">
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+                                <FileText className="w-5 h-5 text-primary" />
+                            </div>
+                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm">
+                                Knowledge Base
+                            </h1>
+                        </div>
+                        <p className="text-muted-foreground/60 text-sm max-w-md leading-relaxed">
+                            Organize and manage your document ecosystem for grounded AI responses.
+                        </p>
                     </div>
+
                     <button
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploading}
-                        className="h-11 px-6 bg-primary text-primary-foreground rounded-xl font-semibold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-50"
+                        className="group relative h-12 px-8 bg-primary text-primary-foreground rounded-2xl font-bold text-sm transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-3 shadow-xl shadow-primary/20 overflow-hidden disabled:opacity-50"
                     >
-                        {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-                        Upload Document
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                        {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4 relative z-10" />}
+                        <span className="relative z-10">Upload Document</span>
                     </button>
+
                     <input
                         type="file"
                         className="hidden"
@@ -118,109 +130,157 @@ export default function KnowledgePage() {
                     />
                 </div>
 
-                {/* Stats */}
+                {/* Stats Dashboard */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {[
-                        { label: "Total Documents", value: documents.length, icon: FileText, color: "text-blue-400" },
-                        { label: "Indexed Chunks", value: documents.reduce((acc, d) => acc + (d.chunkCount || 0), 0), icon: RefreshCw, color: "text-primary" },
-                        { label: "Storage", value: formatSize(documents.reduce((acc, d) => acc + d.fileSize, 0)), icon: Clock, color: "text-amber-400" },
+                        { label: "Total Documents", value: documents.length, icon: FileText, color: "text-blue-400", bg: "bg-blue-400/10" },
+                        { label: "Indexed Chunks", value: documents.reduce((acc, d) => acc + (d.chunkCount || 0), 0), icon: RefreshCw, color: "text-primary", bg: "bg-primary/10" },
+                        { label: "Storage Capacity", value: formatSize(documents.reduce((acc, d) => acc + d.fileSize, 0)), icon: Clock, color: "text-amber-400", bg: "bg-amber-400/10" },
                     ].map((stat, i) => (
-                        <div key={i} className="glass p-6 rounded-2xl space-y-2 border-white/5 bg-white/[0.02]">
-                            <div className="flex items-center justify-between">
-                                <stat.icon className={cn("w-5 h-5", stat.color)} />
-                                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                        <div key={i} className="group relative glass p-6 rounded-3xl border border-border bg-foreground/2 hover:bg-foreground/5 transition-all duration-500 overflow-hidden">
+                            <div className={cn("absolute -right-4 -bottom-4 w-24 h-24 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity", stat.color.replace('text', 'bg'))} />
+
+                            <div className="flex items-center justify-between mb-4">
+                                <div className={cn("p-3 rounded-2xl border border-border", stat.bg)}>
+                                    <stat.icon className={cn("w-5 h-5", stat.color)} />
+                                </div>
+                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-tighter">Live</span>
+                                </div>
                             </div>
-                            <p className="text-3xl font-bold tracking-tight">{stat.value}</p>
-                            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-widest">{stat.label}</p>
+
+                            <div className="space-y-1">
+                                <p className="text-4xl font-black tracking-tighter text-foreground">{stat.value}</p>
+                                <p className="text-[10px] text-muted-foreground/40 uppercase font-black tracking-[0.2em]">{stat.label}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
 
-                {/* Uploader */}
+                {/* Dropzone Area */}
                 <div
                     className={cn(
-                        "border-2 border-dashed rounded-3xl p-16 flex flex-col items-center justify-center gap-4 transition-all duration-500 group relative overflow-hidden",
-                        isDragging ? "border-primary bg-primary/5 scale-[1.01]" : "border-white/10 bg-white/[0.01] hover:bg-white/[0.02] hover:border-white/20"
+                        "group relative border-2 border-dashed rounded-[40px] p-20 flex flex-col items-center justify-center gap-8 transition-all duration-700 overflow-hidden cursor-pointer",
+                        isDragging ? "border-primary bg-primary/5 scale-[1.01]" : "border-border bg-foreground/1 hover:bg-foreground/3 hover:border-primary/20"
                     )}
                     onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                     onDragLeave={() => setIsDragging(false)}
                     onDrop={(e) => { e.preventDefault(); setIsDragging(false); handleUpload(e.dataTransfer.files); }}
+                    onClick={() => fileInputRef.current?.click()}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                    <div className="absolute inset-0 bg-radial-gradient from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                    <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 border border-primary/20">
-                        <Upload className="w-10 h-10 text-primary" />
+                    <div className="relative">
+                        <div className="w-24 h-24 bg-primary/10 rounded-[30px] flex items-center justify-center group-hover:scale-110 group-hover:-rotate-3 transition-all duration-700 border border-primary/20 relative z-10">
+                            <Upload className="w-10 h-10 text-primary" />
+                        </div>
+                        <div className="absolute -inset-4 bg-primary/20 blur-2xl rounded-full opacity-0 group-hover:opacity-40 transition-opacity duration-700" />
                     </div>
-                    <div className="text-center relative z-10">
-                        <p className="font-bold text-xl tracking-tight">Drop your documents here</p>
-                        <p className="text-sm text-muted-foreground mt-1 underline decoration-primary/30 underline-offset-4 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                            or click to browse from files
+
+                    <div className="text-center space-y-3 relative z-10">
+                        <h3 className="font-extrabold text-3xl tracking-tight text-foreground">Drop files to index</h3>
+                        <p className="text-muted-foreground/60 text-sm max-w-xs mx-auto">
+                            Add PDF, DOCX or TXT files to train your AI assistant with custom knowledge.
                         </p>
                     </div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold mt-4 px-4 py-1.5 bg-white/5 rounded-full border border-white/10">
-                        PDF • DOCX • TXT
-                    </p>
+
+                    <div className="flex items-center gap-4 relative z-10">
+                        <div className="h-px w-8 bg-border" />
+                        <span className="text-[10px] font-black opacity-20 uppercase tracking-[0.3em]">Supported Formats</span>
+                        <div className="h-px w-8 bg-border" />
+                    </div>
+
+                    <div className="flex gap-2 relative z-10">
+                        {['PDF', 'DOCX', 'TXT'].map(fmt => (
+                            <span key={fmt} className="px-4 py-1.5 bg-foreground/5 rounded-xl border border-border text-[10px] font-bold opacity-40 tracking-widest uppercase">
+                                {fmt}
+                            </span>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Document List */}
-                <div className="space-y-6">
-                    <div className="flex items-center justify-between px-2">
-                        <h2 className="text-xl font-bold tracking-tight">Recently Added</h2>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
-                            <Clock className="w-3 h-3" />
-                            Auto-refreshing status
+                {/* Document Explorer */}
+                <div className="space-y-8 pb-12">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <h2 className="text-2xl font-black tracking-tight text-foreground">Recent Artifacts</h2>
+                            <div className="px-2 py-0.5 rounded-md bg-foreground/5 border border-border text-[9px] font-black opacity-20 uppercase tracking-tighter">
+                                {documents.length} Units
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3 text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">
+                            <div className="w-1.5 h-1.5 rounded-full bg-primary/40 animate-pulse" />
+                            Auto-sync enabled
                         </div>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="grid grid-cols-1 gap-4">
                         {loading ? (
-                            [1, 2, 3].map(i => <div key={i} className="h-20 glass rounded-2xl animate-pulse" />)
+                            [1, 2, 3].map(i => (
+                                <div key={i} className="h-24 glass rounded-3xl border border-border animate-pulse" />
+                            ))
                         ) : documents.length === 0 ? (
-                            <div className="text-center py-20 glass rounded-3xl space-y-4">
-                                <FileText className="w-12 h-12 text-white/5 mx-auto" />
-                                <p className="text-muted-foreground text-sm">No documents found. Upload your first one to get started.</p>
+                            <div className="flex flex-col items-center justify-center py-24 glass rounded-[40px] border border-border space-y-6">
+                                <div className="w-20 h-20 bg-foreground/5 rounded-3xl flex items-center justify-center opacity-20">
+                                    <FileText className="w-10 h-10" />
+                                </div>
+                                <div className="text-center space-y-2">
+                                    <p className="font-extrabold text-xl opacity-40 tracking-tight">Ecosystem is empty</p>
+                                    <p className="text-xs text-muted-foreground/40 max-w-xs mx-auto">
+                                        Upload documents to populate your knowledge base and enable RAG capabilities.
+                                    </p>
+                                </div>
                             </div>
                         ) : (
                             documents.map((doc) => (
-                                <div key={doc._id} className="glass group hover:bg-white/[0.04] transition-all p-5 rounded-2xl flex items-center gap-5 border-white/5">
-                                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center shrink-0 border border-white/5 group-hover:border-primary/20 transition-colors">
-                                        <FileText className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2">
-                                            <p className="font-bold text-sm truncate">{doc.fileName}</p>
-                                            <span className="text-[10px] text-muted-foreground bg-white/5 px-2 py-0.5 rounded border border-white/5 uppercase font-bold tracking-tighter">{doc.fileType.split('/')[1]}</span>
-                                        </div>
-                                        <p className="text-xs text-muted-foreground flex items-center gap-3 mt-1.5 font-medium">
-                                            <span>{formatSize(doc.fileSize)}</span>
-                                            <span className="w-1 h-1 bg-white/10 rounded-full" />
-                                            <span>{new Date(doc.createdAt).toLocaleDateString()}</span>
-                                        </p>
+                                <div key={doc._id} className="group relative glass hover:bg-foreground/5 transition-all duration-500 p-6 rounded-[32px] flex items-center gap-6 border border-border hover:border-primary/20">
+                                    <div className="w-14 h-14 bg-foreground/5 rounded-2xl flex items-center justify-center shrink-0 border border-border group-hover:scale-105 transition-transform duration-500 group-hover:border-primary/30">
+                                        <FileText className="w-7 h-7 text-muted-foreground/40 group-hover:text-primary transition-colors duration-500" />
                                     </div>
 
-                                    <div className="flex items-center gap-8">
-                                        {/* Status Badge */}
+                                    <div className="flex-1 min-w-0 space-y-1.5">
+                                        <div className="flex items-center gap-3">
+                                            <h4 className="font-bold text-base text-foreground truncate max-w-md group-hover:text-primary transition-colors">
+                                                {doc.fileName}
+                                            </h4>
+                                            <span className="text-[9px] font-black bg-foreground/5 px-2.5 py-1 rounded-lg border border-border text-muted-foreground/40 uppercase tracking-tighter">
+                                                {doc.fileType.split('/')[1] || 'DOC'}
+                                            </span>
+                                        </div>
+                                        <div className="flex items-center gap-4 text-[11px] font-bold text-muted-foreground/30 uppercase tracking-widest">
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="w-1 h-1 rounded-full bg-foreground/10" />
+                                                {formatSize(doc.fileSize)}
+                                            </div>
+                                            <div className="flex items-center gap-1.5">
+                                                <div className="w-1 h-1 rounded-full bg-foreground/10" />
+                                                {new Date(doc.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-8 shrink-0">
+                                        {/* Status Unit */}
                                         <div className={cn(
-                                            "flex items-center gap-2 px-3 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest min-w-[100px] justify-center",
-                                            doc.status === "READY" && "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-                                            doc.status === "PROCESSING" && "bg-primary/10 text-primary border-primary/20",
-                                            doc.status === "FAILED" && "bg-destructive/10 text-destructive border-destructive/20",
-                                            doc.status === "PENDING" && "bg-white/5 text-muted-foreground border-white/10"
+                                            "flex items-center gap-2.5 px-4 py-2 rounded-2xl border text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-500",
+                                            doc.status === "READY" && "bg-emerald-500/5 text-emerald-400 border-emerald-500/10 group-hover:bg-emerald-500/10",
+                                            doc.status === "PROCESSING" && "bg-primary/5 text-primary border-primary/10 group-hover:bg-primary/10",
+                                            doc.status === "FAILED" && "bg-destructive/5 text-destructive border-destructive/10 group-hover:bg-destructive/10",
+                                            doc.status === "PENDING" && "bg-foreground/5 text-muted-foreground/40 border-border"
                                         )}>
-                                            {doc.status === "PROCESSING" ? <RefreshCw className="w-3 h-3 animate-spin" /> :
-                                                doc.status === "READY" ? <CheckCircle2 className="w-3 h-3" /> :
-                                                    doc.status === "FAILED" ? <AlertCircle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+                                            {doc.status === "PROCESSING" ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> :
+                                                doc.status === "READY" ? <CheckCircle2 className="w-3.5 h-3.5" /> :
+                                                    doc.status === "FAILED" ? <AlertCircle className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
                                             {doc.status}
                                         </div>
 
-                                        <div className="flex items-center gap-1">
-                                            <button
-                                                onClick={() => handleDelete(doc._id)}
-                                                className="p-2.5 rounded-xl text-muted-foreground hover:text-white hover:bg-destructive shadow-sm transition-all"
-                                            >
-                                                <Trash2 className="w-4 h-4" />
-                                            </button>
-                                        </div>
+                                        <button
+                                            onClick={() => handleDelete(doc._id)}
+                                            className="p-3.5 rounded-2xl text-muted-foreground/20 hover:text-primary-foreground hover:bg-destructive shadow-lg transition-all duration-300 opacity-0 group-hover:opacity-100"
+                                        >
+                                            <Trash2 className="w-4.5 h-4.5" />
+                                        </button>
                                     </div>
                                 </div>
                             ))

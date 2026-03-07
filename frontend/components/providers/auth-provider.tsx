@@ -32,8 +32,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             const token = localStorage.getItem("token");
             if (token) {
                 try {
-                    const userData = await ApiService.get<User>("/auth/profile");
-                    setUser(userData);
+                    const userData = await ApiService.get<{user: User}>("/auth/profile");
+                    setUser(userData.user);
                 } catch (error) {
                     console.error("Auth initialization failed:", error);
                     localStorage.removeItem("token");

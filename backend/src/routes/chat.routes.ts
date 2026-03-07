@@ -8,6 +8,7 @@ import {
     getSession,
     sendMessage,
     deleteSession,
+    getSessionUsage,
 } from "@controllers/chat.controller";
 import {
     createSessionValidator,
@@ -43,6 +44,14 @@ router.get(
     sessionIdValidator,
     validate,
     getSession,
+);
+
+// ── Get token usage for a session ───────────────────────────────────────────
+router.get(
+    "/sessions/:sessionId/usage",
+    sessionIdValidator,
+    validate,
+    getSessionUsage,
 );
 
 // ── Send a message (SSE streaming) ───────────────────────────────────────────

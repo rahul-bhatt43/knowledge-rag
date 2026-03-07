@@ -5,6 +5,8 @@ import { Header } from "@/components/layout/header";
 import { useAuth } from "@/components/providers/auth-provider";
 import { Loader2 } from "lucide-react";
 
+import { ChatProvider } from "@/components/providers/chat-provider";
+
 export default function DashboardLayout({
     children,
 }: {
@@ -23,14 +25,16 @@ export default function DashboardLayout({
     if (!user) return null;
 
     return (
-        <div className="flex h-screen bg-background text-foreground overflow-hidden">
-            <Sidebar />
-            <div className="flex-1 flex flex-col min-w-0">
-                <Header />
-                <main className="flex-1 overflow-auto bg-white/5 custom-scrollbar">
-                    {children}
-                </main>
+        <ChatProvider>
+            <div className="flex h-screen bg-background text-foreground overflow-hidden">
+                <Sidebar />
+                <div className="flex-1 flex flex-col min-w-0">
+                    <Header />
+                    <main className="flex-1 overflow-auto bg-background/5 custom-scrollbar">
+                        {children}
+                    </main>
+                </div>
             </div>
-        </div>
+        </ChatProvider>
     );
 }

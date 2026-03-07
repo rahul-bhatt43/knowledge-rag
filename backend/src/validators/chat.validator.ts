@@ -8,6 +8,14 @@ export const createSessionValidator = [
         .trim()
         .isLength({ max: 200 })
         .withMessage("Title must be at most 200 characters"),
+    body("documentIds")
+        .optional()
+        .isArray()
+        .withMessage("documentIds must be an array"),
+    body("documentIds.*")
+        .optional()
+        .isMongoId()
+        .withMessage("Each documentId must be a valid Mongo ID"),
 ];
 
 export const sendMessageValidator = [

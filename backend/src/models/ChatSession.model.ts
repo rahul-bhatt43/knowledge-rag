@@ -26,6 +26,7 @@ export interface IChatSession extends Document {
     title: string;
     messages: IChatMessage[];
     totalTokensUsed: number;
+    documentIds: Types.ObjectId[];
     createdAt: Date;
     updatedAt: Date;
 }
@@ -90,6 +91,10 @@ const ChatSessionSchema = new Schema<IChatSession>(
             type: Number,
             default: 0,
         },
+        documentIds: [{
+            type: Schema.Types.ObjectId,
+            ref: "Document",
+        }],
     },
     {
         timestamps: true,

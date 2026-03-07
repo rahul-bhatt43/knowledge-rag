@@ -12,6 +12,7 @@ import { config } from "@config/env";
 import logger from "@utils/logger.util";
 import { ApiError } from "@utils/ApiError";
 
+import { Schema, model, Document, Types } from "mongoose";
 import { ChatSession, IChatSource, IChatMessage } from "@models/ChatSession.model";
 import { DocumentChunk } from "@models/DocumentChunk.model";
 
@@ -35,12 +36,17 @@ interface RetrievedContext {
 async function retrieveContext(
     query: string,
     topK: number = config.ai.topK,
+    documentIds?: string[],
 ): Promise<RetrievedContext> {
     // 1. Embed the query
     const queryVector = await generateEmbedding(query);
 
-    // 2. Similarity search in Pinecone
-    const results = await similaritySearch(queryVector, topK);
+    // 2. Similarity search in Pinecone with optional document filtering
+    const filter = documentIds && documentIds.length > 0
+        ? { documentId: { $in: documentIds } }
+        : undefined;
+
+    const results = await similaritySearch(queryVector, topK, filter);
 
     if (results.length === 0) {
         return {
@@ -122,8 +128,12 @@ export async function streamChatAnswer(options: StreamChatOptions): Promise<void
     }
 
     try {
-        // 2. Retrieve context
-        const { contextString, sources } = await retrieveContext(userMessage);
+        // 2. Retrieve context with optional filtering by session's documentIds
+        const { contextString, sources } = await retrieveContext(
+            userMessage,
+            config.ai.topK,
+            session.documentIds?.map((id) => id.toString()),
+        );
 
         // Emit sources early so the UI can render them
         onSources(sources);
@@ -204,8 +214,19 @@ ${userMessage}`;
 
 // ─── Session management helpers ───────────────────────────────────────────────
 
-export async function createChatSession(userId: string, title?: string) {
-    return ChatSession.create({ userId, title: title ?? "New Chat" });
+export async function createChatSession(userId: string, title?: string, documentIds?: string[]) {
+    return ChatSession.create({
+        userId,
+        title: title ?? "New Chat",
+        documentIds: (documentIds || []).map(id => new Types.ObjectId(id)),
+    });
+}
+
+export async function getChatSessionUsage(sessionId: string, userId: string) {
+    const session = await ChatSession.findOne({ _id: sessionId, userId })
+        .select("totalTokensUsed")
+        .lean();
+    return session?.totalTokensUsed || 0;
 }
 
 export async function getChatSessions(userId: string, page = 1, limit = 20) {

@@ -9,15 +9,26 @@ import {
     getChatSessions,
     getChatSessionById,
     deleteChatSession,
+    getChatSessionUsage,
 } from "@services/chat.service";
 
 // ── POST /api/v1/chat/sessions ────────────────────────────────────────────────
 export const createSession = asyncHandler(async (req: Request, res: Response) => {
-    const { title } = req.body as { title?: string };
-    const session = await createChatSession(req.user!.id.toString(), title);
+    const { title, documentIds } = req.body as { title?: string; documentIds?: string[] };
+    const session = await createChatSession(req.user!.id.toString(), title, documentIds);
     return res.status(201).json(
         new ApiResponse(201, session, "Chat session created"),
     );
+});
+
+// ── GET /api/v1/chat/sessions/:sessionId/usage ───────────────────────────────
+export const getSessionUsage = asyncHandler(async (req: Request, res: Response) => {
+    const { sessionId } = req.params;
+    const usage = await getChatSessionUsage(
+        sessionId,
+        req.user!.id.toString()
+    );
+    return res.json(new ApiResponse(200, { totalTokensUsed: usage }));
 });
 
 // ── GET /api/v1/chat/sessions ─────────────────────────────────────────────────
