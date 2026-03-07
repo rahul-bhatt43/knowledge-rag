@@ -15,6 +15,7 @@ interface ChatContextType {
     loadingSessions: boolean;
     refreshSessions: () => Promise<void>;
     getSessionTitle: (sessionId: string | null) => string | null;
+    renameSession: (sessionId: string, title: string) => Promise<void>;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -53,8 +54,18 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
         return session ? session.title : null;
     }, [sessions]);
 
+    const renameSession = useCallback(async (sessionId: string, title: string) => {
+        try {
+            await ApiService.put(`/chat/sessions/${sessionId}`, { title });
+            setSessions(current => current.map(s => s._id === sessionId ? { ...s, title } : s));
+        } catch (err) {
+            console.error("Failed to rename session:", err);
+            throw err;
+        }
+    }, []);
+
     return (
-        <ChatContext.Provider value={{ sessions, loadingSessions, refreshSessions: fetchSessions, getSessionTitle }}>
+        <ChatContext.Provider value={{ sessions, loadingSessions, refreshSessions: fetchSessions, getSessionTitle, renameSession }}>
             {children}
         </ChatContext.Provider>
     );

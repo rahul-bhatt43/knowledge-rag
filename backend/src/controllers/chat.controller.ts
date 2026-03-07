@@ -63,11 +63,11 @@ export const deleteSession = asyncHandler(async (req: Request, res: Response) =>
 
 // ── PUT /api/v1/chat/sessions/:sessionId ──────────────────────────────────────
 export const updateSession = asyncHandler(async (req: Request, res: Response) => {
-    const { documentIds } = req.body as { documentIds?: string[] };
+    const { documentIds, title } = req.body as { documentIds?: string[], title?: string };
     const session = await updateChatSession(
         req.params.sessionId,
         req.user!.id.toString(),
-        { documentIds }
+        { documentIds, title }
     );
     if (!session) throw new ApiError(404, "Chat session not found");
     return res.json(new ApiResponse(200, session, "Session updated"));

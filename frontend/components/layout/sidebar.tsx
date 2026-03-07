@@ -13,7 +13,10 @@ import {
     History,
     LogOut,
     Trash2,
-    Loader2
+    Loader2,
+    Edit2,
+    Check,
+    X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -33,10 +36,14 @@ export function Sidebar() {
     const activeSessionId = searchParams.get("session");
 
     const { user, logout } = useAuth();
-    const { sessions, loadingSessions, refreshSessions } = useChat();
+    const { sessions, loadingSessions, refreshSessions, renameSession } = useChat();
     const [collapsed, setCollapsed] = useState(false);
     const [creatingSession, setCreatingSession] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editTitle, setEditTitle] = useState("");
+    const [isSaving, setIsSaving] = useState(false);
 
     const handleCreateSession = () => {
         router.push("/");
@@ -55,6 +62,42 @@ export function Sidebar() {
             }
         } catch (err) {
             console.error("Failed to delete session:", err);
+        }
+    };
+
+    const handleSaveEdit = async (e?: React.MouseEvent, id?: string) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        if (!editingId || !editTitle.trim()) {
+            setEditingId(null);
+            return;
+        }
+        const sessionToEdit = sessions.find(s => s._id === editingId);
+        if (sessionToEdit?.title === editTitle.trim()) {
+            setEditingId(null);
+            return;
+        }
+
+        setIsSaving(true);
+        try {
+            await renameSession(editingId, editTitle.trim());
+        } catch (err) {
+            console.error("Failed to rename session", err);
+        } finally {
+            setIsSaving(false);
+            setEditingId(null);
+        }
+    };
+
+    const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            e.stopPropagation();
+            handleSaveEdit(undefined, id);
+        } else if (e.key === "Escape") {
+            setEditingId(null);
         }
     };
 
@@ -160,19 +203,54 @@ export function Sidebar() {
                                     <Link
                                         key={session._id}
                                         href={`/?session=${session._id}`}
+                                        onClick={(e) => {
+                                            if (editingId === session._id) e.preventDefault();
+                                        }}
                                         className={cn(
-                                            "flex items-center gap-3 px-3 h-10 rounded-lg transition-all group relative animate-in",
-                                            activeSessionId === session._id ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                                            "flex items-center gap-3 px-3 h-10 rounded-lg transition-all group relative",
+                                            activeSessionId === session._id ? "bg-foreground/10 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
+                                            editingId === session._id && "bg-foreground/10"
                                         )}
                                     >
                                         <History className="w-4 h-4 shrink-0 text-muted-foreground group-hover:text-foreground transition-colors" />
-                                        <span className="text-xs truncate flex-1">{session.title}</span>
-                                        <button
-                                            onClick={(e) => handleDeleteSession(e, session._id)}
-                                            className="opacity-0 group-hover:opacity-100 p-1 hover:text-destructive transition-all"
-                                        >
-                                            <Trash2 className="w-3 h-3" />
-                                        </button>
+
+                                        {editingId === session._id ? (
+                                            <div className="flex-1 flex items-center min-w-0" onClick={e => e.preventDefault()}>
+                                                <input
+                                                    autoFocus
+                                                    value={editTitle}
+                                                    onChange={(e) => setEditTitle(e.target.value)}
+                                                    onKeyDown={(e) => handleKeyDown(e, session._id)}
+                                                    onBlur={() => handleSaveEdit()}
+                                                    disabled={isSaving}
+                                                    className="w-full bg-background/50 border border-primary/50 text-foreground text-xs rounded px-2 py-1 outline-none"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <span className="text-xs truncate w-[80%] ">{session.title}</span>
+                                        )}
+
+                                        {editingId !== session._id && (
+                                            <div className="opacity-0 group-hover:opacity-100 flex items-center transition-all bg-background/50 backdrop-blur-sm px-1 rounded absolute right-2">
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        setEditingId(session._id);
+                                                        setEditTitle(session.title);
+                                                    }}
+                                                    className="p-1 hover:text-primary transition-all text-muted-foreground"
+                                                >
+                                                    <Edit2 className="w-3 h-3" />
+                                                </button>
+                                                <button
+                                                    onClick={(e) => handleDeleteSession(e, session._id)}
+                                                    className="p-1 hover:text-destructive transition-all text-muted-foreground"
+                                                >
+                                                    <Trash2 className="w-3 h-3" />
+                                                </button>
+                                            </div>
+                                        )}
                                     </Link>
                                 ))}
                             {!loadingSessions && sessions.filter(s => s.title.toLowerCase().includes(searchTerm.toLowerCase())).length === 0 && (

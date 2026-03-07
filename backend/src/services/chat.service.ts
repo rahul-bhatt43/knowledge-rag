@@ -254,11 +254,14 @@ export async function deleteChatSession(sessionId: string, userId: string) {
 export async function updateChatSession(
     sessionId: string,
     userId: string,
-    updates: { documentIds?: string[] },
+    updates: { documentIds?: string[]; title?: string },
 ) {
     const updateData: any = {};
     if (updates.documentIds) {
         updateData.documentIds = updates.documentIds.map((id) => new Types.ObjectId(id));
+    }
+    if (updates.title) {
+        updateData.title = updates.title;
     }
 
     return ChatSession.findOneAndUpdate(
