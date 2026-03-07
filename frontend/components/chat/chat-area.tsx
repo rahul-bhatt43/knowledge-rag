@@ -371,89 +371,7 @@ export function ChatArea() {
             {/* Background Decor */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent pointer-events-none" />
 
-            {/* Sticky Header for Active Session */}
-            {sessionId && !loadingHistory && (
-                <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50 px-8 py-3">
-                    <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div className="flex flex-col">
-                            <span className="text-sm font-bold opacity-80">Current Session</span>
-                            <span className="text-xs text-muted-foreground">{messages.length > 1 ? messages[1].content.slice(0, 30) + '...' : 'New Chat'}</span>
-                        </div>
-                        <button
-                            onClick={() => setShowDocManager(!showDocManager)}
-                            className={cn(
-                                "flex items-center gap-2 px-3 py-1.5 rounded-lg border transition-all text-xs font-bold",
-                                showDocManager
-                                    ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20"
-                                    : "border-border bg-foreground/5 hover:bg-foreground/10 text-foreground"
-                            )}
-                        >
-                            <Paperclip className="w-3.5 h-3.5" />
-                            <span>Knowledge Sources ({selectedDocIds.length})</span>
-                        </button>
-                    </div>
 
-                    {showDocManager && (
-                        <div className="max-w-4xl mx-auto mt-4 p-5 border border-border rounded-3xl bg-foreground/2 space-y-5 shadow-2xl mb-2">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-2">
-                                    <BookOpen className="w-4 h-4 text-primary" />
-                                    <h3 className="text-[10px] font-black tracking-[0.2em] uppercase opacity-60">Manage Linked Documents</h3>
-                                </div>
-                                <button
-                                    onClick={handleUpdateDocs}
-                                    className="px-4 py-1.5 bg-primary text-primary-foreground text-xs font-bold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-2"
-                                >
-                                    <Check className="w-3.5 h-3.5" /> Save Changes
-                                </button>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 w-full max-h-[30vh] overflow-y-auto custom-scrollbar pr-2">
-                                {availableDocs.map((doc) => {
-                                    const isSelected = selectedDocIds.includes(doc._id);
-                                    return (
-                                        <button
-                                            key={doc._id}
-                                            onClick={() => {
-                                                setSelectedDocIds(prev =>
-                                                    isSelected ? prev.filter(id => id !== doc._id) : [...prev, doc._id]
-                                                );
-                                            }}
-                                            className={cn(
-                                                "group relative p-2.5 rounded-xl border transition-all duration-300 text-left backdrop-blur-sm shadow-sm",
-                                                isSelected
-                                                    ? "bg-primary/15 border-primary/50 shadow-[0_0_20px_rgba(var(--primary-rgb),0.1)]"
-                                                    : "bg-background border-border hover:border-foreground/20 hover:bg-foreground/5 flex-row"
-                                            )}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <div className={cn(
-                                                    "w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border transition-all duration-300",
-                                                    isSelected
-                                                        ? "bg-primary border-primary shadow-md shadow-primary/20 scale-105"
-                                                        : "bg-foreground/5 border-border text-muted-foreground group-hover:scale-105"
-                                                )}>
-                                                    <Paperclip className={cn("w-3 h-3 transition-colors", isSelected ? "text-primary-foreground" : "opacity-40")} />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <p className={cn("text-[11px] font-bold truncate transition-colors", isSelected ? "text-foreground" : "opacity-60")}>
-                                                        {doc.fileName}
-                                                    </p>
-                                                    <p className="text-[8px] text-muted-foreground uppercase tracking-widest font-black mt-0.5 opacity-40">
-                                                        {doc.chunkCount} Chunks
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                            {availableDocs.length === 0 && (
-                                <p className="text-xs text-muted-foreground italic text-center py-2">No documents available to link.</p>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
 
             {/* Messages Scroll Area */}
             <div
@@ -689,6 +607,56 @@ export function ChatArea() {
 
                         <div className="relative glass rounded-[32px] p-2 border border-border shadow-2xl focus-within:border-primary/30 transition-all bg-foreground/[0.02]">
                             <div className="flex flex-col gap-2">
+                                {/* Optional Expandable Doc Manager within Input */}
+                                {sessionId && showDocManager && (
+                                    <div className="p-4 mx-2 mt-2 border border-border rounded-3xl bg-background/50 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <BookOpen className="w-3.5 h-3.5 text-primary" />
+                                                <h3 className="text-[10px] font-black tracking-[0.2em] uppercase opacity-60">Session Documents</h3>
+                                            </div>
+                                            <button
+                                                onClick={handleUpdateDocs}
+                                                className="px-3 py-1 bg-primary text-primary-foreground text-[10px] uppercase tracking-widest font-black rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1.5"
+                                            >
+                                                <Check className="w-3 h-3" /> Save config
+                                            </button>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 w-full max-h-40 overflow-y-auto custom-scrollbar pr-1">
+                                            {availableDocs.map((doc) => {
+                                                const isSelected = selectedDocIds.includes(doc._id);
+                                                return (
+                                                    <button
+                                                        key={doc._id}
+                                                        onClick={() => {
+                                                            setSelectedDocIds(prev =>
+                                                                isSelected ? prev.filter(id => id !== doc._id) : [...prev, doc._id]
+                                                            );
+                                                        }}
+                                                        className={cn(
+                                                            "group p-2 rounded-xl border transition-all duration-300 text-left backdrop-blur-sm flex items-center gap-2",
+                                                            isSelected
+                                                                ? "bg-primary/15 border-primary/50"
+                                                                : "bg-background border-border hover:bg-foreground/5"
+                                                        )}
+                                                    >
+                                                        <div className={cn(
+                                                            "w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border transition-all",
+                                                            isSelected ? "bg-primary border-primary" : "bg-foreground/5 border-border"
+                                                        )}>
+                                                            <Paperclip className={cn("w-3 h-3 transition-colors", isSelected ? "text-primary-foreground" : "text-muted-foreground")} />
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className={cn("text-[10px] font-bold truncate", isSelected ? "text-foreground" : "text-foreground/60")}>
+                                                                {doc.fileName}
+                                                            </p>
+                                                        </div>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
                                 {/* Input Row */}
                                 <div className="px-4 pt-2 flex items-center justify-between pb-2">
                                     <textarea
@@ -738,6 +706,21 @@ export function ChatArea() {
                                                 )}
                                             >
                                                 <Mic className={cn("w-5 h-5 shrink-0 relative z-10 animate-in fade-in zoom-in duration-300", isListening && "animate-pulse")} />
+                                            </button>
+                                        )}
+                                        {sessionId && (
+                                            <button
+                                                onClick={() => setShowDocManager(!showDocManager)}
+                                                className={cn(
+                                                    "w-11 h-11 rounded-full bg-foreground/5 text-muted-foreground hover:text-foreground hover:bg-foreground/10 transition-all duration-500 flex items-center justify-center relative group overflow-hidden border",
+                                                    showDocManager ? "border-primary/50 text-foreground bg-primary/10" : "border-transparent"
+                                                )}
+                                                title="Manage Knowledge Sources"
+                                            >
+                                                <Paperclip className="w-5 h-5 shrink-0 relative flex-1" />
+                                                {selectedDocIds.length > 0 && (
+                                                    <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-primary rounded-full animate-pulse" />
+                                                )}
                                             </button>
                                         )}
                                     </div>
