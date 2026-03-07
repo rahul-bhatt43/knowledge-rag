@@ -94,65 +94,42 @@ export default function KnowledgePage() {
 
     return (
         <DashboardLayout>
-            <div className="p-8 max-w-6xl mx-auto space-y-12 animate-in fade-in duration-700">
+            <div className="p-4 sm:p-8 max-w-6xl mx-auto space-y-8 sm:space-y-12 animate-in fade-in duration-700">
                 {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                                <FileText className="w-5 h-5 text-primary" />
-                            </div>
-                            <h1 className="text-4xl font-extrabold tracking-tight text-foreground drop-shadow-sm">
-                                Knowledge Base
-                            </h1>
-                        </div>
-                        <p className="text-muted-foreground/60 text-sm max-w-md leading-relaxed">
-                            Organize and manage your document ecosystem for grounded AI responses.
-                        </p>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-foreground">Knowledge Base</h1>
+                        <p className="text-muted-foreground mt-1 text-sm lg:text-base">Upload and manage your company documents.</p>
                     </div>
-
-                    <button
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={uploading}
-                        className="group relative h-12 px-8 bg-primary text-primary-foreground rounded-2xl font-bold text-sm transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-3 shadow-xl shadow-primary/20 overflow-hidden disabled:opacity-50"
-                    >
-                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                        {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4 relative z-10" />}
-                        <span className="relative z-10">Upload Document</span>
-                    </button>
-
-                    <input
-                        type="file"
-                        className="hidden"
-                        ref={fileInputRef}
-                        onChange={(e) => handleUpload(e.target.files)}
-                        accept=".pdf,.docx,.txt,.xlsx,.csv,.json"
-                    />
+                    {/* Placeholder for search input if needed, removed for this specific change */}
+                    {/* <div className="flex items-center gap-3">
+                        <div className="relative group">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
+                            <Input
+                                placeholder="Search documents..."
+                                className="pl-10 w-full sm:w-64 h-10 lg:h-11 bg-card/50 border-white/5 focus:border-primary/30 transition-all rounded-xl"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </div>
+                    </div> */}
                 </div>
 
                 {/* Stats Dashboard */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     {[
-                        { label: "Total Documents", value: documents.length, icon: FileText, color: "text-blue-400", bg: "bg-blue-400/10" },
+                        { label: "Total Documents", value: documents.length, icon: FileText, color: "text-blue-500", bg: "bg-blue-500/10" },
                         { label: "Indexed Chunks", value: documents.reduce((acc, d) => acc + (d.chunkCount || 0), 0), icon: RefreshCw, color: "text-primary", bg: "bg-primary/10" },
-                        { label: "Storage Capacity", value: formatSize(documents.reduce((acc, d) => acc + d.fileSize, 0)), icon: Clock, color: "text-amber-400", bg: "bg-amber-400/10" },
+                        { label: "Storage Used", value: formatSize(documents.reduce((acc, d) => acc + d.fileSize, 0)), icon: Clock, color: "text-amber-500", bg: "bg-amber-500/10" },
+                        { label: "Processed", value: documents.filter(d => d.status === 'READY').length, icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-500/10" },
                     ].map((stat, i) => (
-                        <div key={i} className="group relative glass p-6 rounded-3xl border border-border bg-foreground/2 hover:bg-foreground/5 transition-all duration-500 overflow-hidden">
-                            <div className={cn("absolute -right-4 -bottom-4 w-24 h-24 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity", stat.color.replace('text', 'bg'))} />
-
-                            <div className="flex items-center justify-between mb-4">
-                                <div className={cn("p-3 rounded-2xl border border-border", stat.bg)}>
-                                    <stat.icon className={cn("w-5 h-5", stat.color)} />
-                                </div>
-                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                                    <span className="text-[8px] font-black text-emerald-500 uppercase tracking-tighter">Live</span>
-                                </div>
+                        <div key={i} className="glass p-4 rounded-2xl border border-border flex items-center gap-4 group hover:border-primary/20 transition-all cursor-default">
+                            <div className={cn("w-10 h-10 lg:w-12 lg:h-12 rounded-xl lg:rounded-2xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110", stat.bg)}>
+                                <stat.icon className={cn("w-5 h-5 lg:w-6 lg:h-6", stat.color)} />
                             </div>
-
-                            <div className="space-y-1">
-                                <p className="text-4xl font-black tracking-tighter text-foreground">{stat.value}</p>
-                                <p className="text-[10px] text-muted-foreground/40 uppercase font-black tracking-[0.2em]">{stat.label}</p>
+                            <div>
+                                <p className="text-[11px] lg:text-xs font-semibold text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+                                <p className="text-lg lg:text-xl font-bold text-foreground">{stat.value}</p>
                             </div>
                         </div>
                     ))}
@@ -161,7 +138,7 @@ export default function KnowledgePage() {
                 {/* Dropzone Area */}
                 <div
                     className={cn(
-                        "group relative border-2 border-dashed rounded-[40px] p-20 flex flex-col items-center justify-center gap-8 transition-all duration-700 overflow-hidden cursor-pointer",
+                        "group relative border-2 border-dashed rounded-[32px] p-8 sm:p-12 lg:p-20 flex flex-col items-center justify-center gap-6 sm:gap-8 transition-all duration-700 overflow-hidden cursor-pointer",
                         isDragging ? "border-primary bg-primary/5 scale-[1.01]" : "border-border bg-foreground/1 hover:bg-foreground/3 hover:border-primary/20"
                     )}
                     onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
@@ -234,21 +211,21 @@ export default function KnowledgePage() {
                             </div>
                         ) : (
                             documents.map((doc) => (
-                                <div key={doc._id} className="group relative glass hover:bg-foreground/5 transition-all duration-500 p-6 rounded-[32px] flex items-center gap-6 border border-border hover:border-primary/20">
-                                    <div className="w-14 h-14 bg-foreground/5 rounded-2xl flex items-center justify-center shrink-0 border border-border group-hover:scale-105 transition-transform duration-500 group-hover:border-primary/30">
-                                        <FileText className="w-7 h-7 text-muted-foreground/40 group-hover:text-primary transition-colors duration-500" />
+                                <div key={doc._id} className="group relative glass hover:bg-foreground/5 transition-all duration-500 p-4 sm:p-6 rounded-[24px] sm:rounded-[32px] flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 border border-border hover:border-primary/20">
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-foreground/5 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border border-border group-hover:scale-105 transition-transform duration-500 group-hover:border-primary/30">
+                                        <FileText className="w-6 h-6 sm:w-7 sm:h-7 text-muted-foreground/40 group-hover:text-primary transition-colors duration-500" />
                                     </div>
 
-                                    <div className="flex-1 min-w-0 space-y-1.5">
-                                        <div className="flex items-center gap-3">
-                                            <h4 className="font-bold text-base text-foreground truncate max-w-md group-hover:text-primary transition-colors">
+                                    <div className="flex-1 min-w-0 space-y-2 sm:space-y-1.5 w-full">
+                                        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                                            <h4 className="font-bold text-sm sm:text-base text-foreground truncate max-w-full sm:max-w-md group-hover:text-primary transition-colors">
                                                 {doc.fileName}
                                             </h4>
-                                            <span className="text-[9px] font-black bg-foreground/5 px-2.5 py-1 rounded-lg border border-border text-muted-foreground/40 uppercase tracking-tighter">
-                                                {doc.fileType.split('/')[1] || 'DOC'}
+                                            <span className="text-[8px] sm:text-[9px] font-black bg-foreground/5 px-2.5 py-1 rounded-lg border border-border text-muted-foreground/40 uppercase tracking-tighter">
+                                                {doc.fileType.split('/')[1]?.toUpperCase() || 'DOC'}
                                             </span>
                                         </div>
-                                        <div className="flex items-center gap-4 text-[11px] font-bold text-muted-foreground/30 uppercase tracking-widest">
+                                        <div className="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-[11px] font-bold text-muted-foreground/30 uppercase tracking-widest">
                                             <div className="flex items-center gap-1.5">
                                                 <div className="w-1 h-1 rounded-full bg-foreground/10" />
                                                 {formatSize(doc.fileSize)}
@@ -260,17 +237,17 @@ export default function KnowledgePage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-8 shrink-0">
+                                    <div className="flex items-center gap-4 sm:gap-8 shrink-0 w-full sm:w-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-border/10">
                                         {/* Status Unit */}
                                         <div className={cn(
-                                            "flex items-center gap-2.5 px-4 py-2 rounded-2xl border text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-500",
+                                            "flex-1 sm:flex-none flex items-center justify-center sm:justify-start gap-2.5 px-4 py-2 rounded-xl sm:rounded-2xl border text-[9px] sm:text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-500",
                                             doc.status === "READY" && "bg-emerald-500/5 text-emerald-400 border-emerald-500/10 group-hover:bg-emerald-500/10",
                                             doc.status === "PROCESSING" && "bg-primary/5 text-primary border-primary/10 group-hover:bg-primary/10",
                                             doc.status === "FAILED" && "bg-destructive/5 text-destructive border-destructive/10 group-hover:bg-destructive/10",
                                             doc.status === "PENDING" && "bg-foreground/5 text-muted-foreground/40 border-border"
                                         )}>
-                                            {doc.status === "PROCESSING" ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> :
-                                                doc.status === "READY" ? <CheckCircle2 className="w-3.5 h-3.5" /> :
+                                            {doc.status === "PROCESSING" ? <RefreshCw className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-spin" /> :
+                                                doc.status === "READY" ? <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> :
                                                     doc.status === "FAILED" ? <AlertCircle className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
                                             {doc.status}
                                         </div>

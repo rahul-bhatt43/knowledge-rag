@@ -29,7 +29,7 @@ const navItems = [
     { label: "Team", href: "/users", icon: Users, adminOnly: true },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isMobileOpen, onMobileClose }: { isMobileOpen?: boolean; onMobileClose?: () => void }) {
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -47,6 +47,7 @@ export function Sidebar() {
 
     const handleCreateSession = () => {
         router.push("/");
+        onMobileClose?.();
     };
 
     const handleDeleteSession = async (e: React.MouseEvent, id: string) => {
@@ -104,8 +105,9 @@ export function Sidebar() {
     return (
         <aside
             className={cn(
-                "glass h-screen transition-all duration-300 flex flex-col relative z-50",
-                collapsed ? "w-20" : "w-72"
+                "glass h-screen transition-all duration-300 flex flex-col fixed inset-y-0 left-0 lg:sticky z-50",
+                collapsed ? "w-20" : "w-72",
+                !isMobileOpen && "-translate-x-full lg:translate-x-0"
             )}
         >
             {/* Brand */}
@@ -117,9 +119,15 @@ export function Sidebar() {
                 )}
                 <button
                     onClick={() => setCollapsed(!collapsed)}
-                    className="p-2 hover:bg-foreground/5 rounded-lg transition-colors text-muted-foreground hover:text-foreground"
+                    className="p-2 hover:bg-foreground/5 rounded-lg transition-colors text-muted-foreground hover:text-foreground hidden lg:block"
                 >
                     <ChevronLeft className={cn("w-5 h-5 transition-transform", collapsed && "rotate-180")} />
+                </button>
+                <button
+                    onClick={onMobileClose}
+                    className="p-2 hover:bg-foreground/5 rounded-lg transition-colors text-muted-foreground hover:text-foreground lg:hidden"
+                >
+                    <X className="w-5 h-5" />
                 </button>
             </div>
 
@@ -143,6 +151,9 @@ export function Sidebar() {
                 <section className="space-y-1">
                     <Link
                         href="/"
+                        onClick={() => {
+                            onMobileClose?.();
+                        }}
                         className={cn(
                             "flex items-center h-10 rounded-xl transition-all group relative overflow-hidden text-sm font-medium",
                             collapsed ? "justify-center" : "gap-3 px-3",
@@ -166,6 +177,7 @@ export function Sidebar() {
                             <Link
                                 key={item.href}
                                 href={item.href}
+                                onClick={() => onMobileClose?.()}
                                 className={cn(
                                     "flex items-center h-10 rounded-xl transition-all group relative overflow-hidden text-sm font-medium",
                                     collapsed ? "justify-center" : "gap-3 px-3",
@@ -224,6 +236,7 @@ export function Sidebar() {
                                             href={`/?session=${session._id}`}
                                             onClick={(e) => {
                                                 if (editingId === session._id) e.preventDefault();
+                                                else onMobileClose?.();
                                             }}
                                             className={cn(
                                                 "flex items-center gap-3 px-3 h-10 rounded-lg transition-all group relative",

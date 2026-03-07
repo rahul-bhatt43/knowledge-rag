@@ -10,8 +10,6 @@ import {
     Paperclip,
     MoreHorizontal,
     Copy,
-    ThumbsUp,
-    RotateCcw,
     ExternalLink,
     MessageSquare,
     Sparkles,
@@ -376,7 +374,7 @@ export function ChatArea() {
             {/* Messages Scroll Area */}
             <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto p-8 pt-4 space-y-10 custom-scrollbar relative z-10"
+                className="flex-1 overflow-y-auto p-4 lg:p-8 pt-4 space-y-6 lg:space-y-10 custom-scrollbar relative z-10"
             >
                 {loadingHistory ? (
                     <div className="space-y-10 animate-pulse">
@@ -406,7 +404,7 @@ export function ChatArea() {
                                     <Sparkles className="w-12 h-12 text-primary animate-bounce fill-primary/10" />
                                 </div>
                             </div>
-                            <h2 className="text-5xl font-black tracking-tight text-foreground">Knowledge<span className="text-primary">Discovery</span></h2>
+                            <h2 className="text-3xl lg:text-5xl font-black tracking-tight text-foreground">Knowledge<span className="text-primary">Discovery</span></h2>
                             <p className="text-muted-foreground max-w-md mx-auto text-base font-medium leading-relaxed opacity-60">
                                 Harness the power of your institutional knowledge. Select documents below to prioritize specific data sources.
                             </p>
@@ -487,13 +485,13 @@ export function ChatArea() {
                             <div
                                 key={message.id}
                                 className={cn(
-                                    "flex gap-6 max-w-4xl mx-auto animate-in slide-in-from-bottom-4 duration-500",
+                                    "flex gap-3 lg:gap-6 max-w-4xl mx-auto animate-in slide-in-from-bottom-4 duration-500",
                                     message.role === "user" ? "ml-auto flex-row-reverse" : "mr-auto"
                                 )}
                             >
                                 {/* Avatar section */}
                                 <div className={cn(
-                                    "w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg relative overflow-hidden",
+                                    "w-8 h-8 lg:w-10 lg:h-10 rounded-xl lg:rounded-2xl flex items-center justify-center shrink-0 shadow-lg relative overflow-hidden",
                                     message.role === "user" ? "bg-foreground/5 border border-border" : "bg-primary text-primary-foreground"
                                 )}>
                                     {message.role === "user" ? <User className="w-5 h-5 text-muted-foreground" /> : <Sparkles className="w-5 h-5 fill-primary-foreground/20" />}
@@ -504,9 +502,9 @@ export function ChatArea() {
 
                                 <div className="space-y-4 flex-1 min-w-0">
                                     <div className={cn(
-                                        "p-2 rounded-4xl text-[15px] leading-7 relative group transition-all duration-500",
+                                        "p-2 rounded-2xl lg:rounded-4xl text-sm lg:text-[15px] leading-relaxed lg:leading-7 relative group transition-all duration-500",
                                         message.role === "user"
-                                            ? "bg-foreground/5 border border-border text-foreground rounded-tr-none px-6 text-right ml-auto w-fit"
+                                            ? "bg-foreground/5 border border-border text-foreground rounded-tr-none px-4 lg:px-6 text-right ml-auto w-fit"
                                             : "rounded-tl-none bg-inherit border-none shadow-none"
                                     )}>
                                         {message.role === "assistant" && !message.content && isThinking ? (
@@ -587,17 +585,21 @@ export function ChatArea() {
 
                                         {/* Message Actions */}
                                         <div className={cn(
-                                            "absolute top-0 opacity-0 group-hover:opacity-100 transition-all duration-300 flex gap-1 transform scale-95 group-hover:scale-100",
-                                            message.role === "user" ? "right-full mr-4" : "left-full ml-4"
+                                            "flex gap-1 transition-all duration-300 transform rounded-xl",
+                                            "lg:absolute lg:top-0 lg:opacity-0 lg:group-hover:opacity-100 lg:scale-95 lg:group-hover:scale-100",
+                                            message.role === "user"
+                                                ? "lg:right-full lg:mr-4 justify-end mt-2 lg:mt-0"
+                                                : "lg:left-full lg:ml-4 justify-start mt-2 lg:mt-0"
                                         )}>
                                             <button
                                                 onClick={() => handleCopy(message.id, message.content)}
-                                                className="p-2 rounded-xl bg-foreground/5 border border-border hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-all shadow-xl"
+                                                className="p-2 lg:p-2 rounded-xl bg-foreground/5 border border-border hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-all shadow-sm lg:shadow-xl"
+                                                title="Copy message"
                                             >
                                                 {copiedId === message.id ? (
-                                                    <Check className="w-4 h-4 text-emerald-500" />
+                                                    <Check className="w-3.5 h-3.5 lg:w-4 lg:h-4 text-emerald-500" />
                                                 ) : (
-                                                    <Copy className="w-4 h-4" />
+                                                    <Copy className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                                                 )}
                                             </button>
                                         </div>
@@ -610,14 +612,14 @@ export function ChatArea() {
             </div>
 
             {/* Input Area */}
-            <div className="pb-4">
-                <div className="p-8 pb-2 pt-0 bg-linear-to-t from-background via-background/90 to-transparent relative z-20">
+            <div className="pb-2 lg:pb-4">
+                <div className="p-4 lg:p-8 lg:pt-0 pb-2 pt-0 bg-linear-to-t from-background via-background/90 to-transparent relative z-20">
                     <div className={cn(
                         "max-w-5xl mx-auto relative transition-all duration-500 group"
                     )}>
                         <div className="absolute -inset-1 bg-linear-to-r from-primary/10 via-transparent to-primary/10 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
 
-                        <div className="relative glass rounded-[32px] p-2 border border-border shadow-2xl focus-within:border-primary/30 transition-all bg-foreground/[0.02]">
+                        <div className="relative glass rounded-[24px] lg:rounded-[32px] p-1.5 lg:p-2 border border-border shadow-2xl focus-within:border-primary/30 transition-all bg-foreground/[0.02]">
                             <div className="flex flex-col gap-2">
                                 {/* Optional Expandable Doc Manager within Input */}
                                 {sessionId && showDocManager && (
