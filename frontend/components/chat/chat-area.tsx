@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
+import { useChat } from "@/components/providers/chat-provider";
 import { API_BASE_URL, ApiService } from "@/lib/api";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -48,7 +49,7 @@ export function ChatArea() {
     const [input, setInput] = useState("");
     const [isTyping, setIsTyping] = useState(false);
     const [isThinking, setIsThinking] = useState(false);
-    const [totalTokensUsed, setTotalTokensUsed] = useState(0);
+    const { totalTokensUsed, setTotalTokensUsed } = useChat();
     const [availableDocs, setAvailableDocs] = useState<any[]>([]);
     const [selectedDocIds, setSelectedDocIds] = useState<string[]>([]);
     const [isLoadingDocs, setIsLoadingDocs] = useState(false);
@@ -743,19 +744,6 @@ export function ChatArea() {
                         </div>
                     </div>
                 </div>
-
-                {/* Minimal Token Usage Footer */}
-                {sessionId && (
-                    <div className="flex flex-col items-center justify-center mt-2 animate-in fade-in slide-in-from-bottom-2 duration-700">
-                        <div className="flex items-center gap-3 px-4 py-1.5 rounded-full bg-foreground/5 border border-border backdrop-blur-sm group hover:border-primary/20 transition-all cursor-default">
-                            <Sparkles className="w-3 h-3 text-primary/40 group-hover:text-primary transition-colors" />
-                            <span className="text-[10px] uppercase tracking-[0.2em] font-black opacity-20 group-hover:opacity-40 transition-colors">Token Usage:</span>
-                            <span className="text-xs font-mono font-bold text-primary/60 group-hover:text-primary transition-colors">
-                                {totalTokensUsed.toLocaleString()} <span className="text-[9px] opacity-40 uppercase tracking-tighter ml-0.5">Tokens</span>
-                            </span>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );

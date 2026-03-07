@@ -16,6 +16,8 @@ interface ChatContextType {
     refreshSessions: () => Promise<void>;
     getSessionTitle: (sessionId: string | null) => string | null;
     renameSession: (sessionId: string, title: string) => Promise<void>;
+    totalTokensUsed: number;
+    setTotalTokensUsed: (tokens: number) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -24,6 +26,7 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     const { user } = useAuth();
     const [sessions, setSessions] = useState<ChatSession[]>([]);
     const [loadingSessions, setLoadingSessions] = useState(true);
+    const [totalTokensUsed, setTotalTokensUsed] = useState(0);
 
     const fetchSessions = useCallback(async () => {
         if (!user) return;
@@ -65,7 +68,15 @@ export function ChatProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     return (
-        <ChatContext.Provider value={{ sessions, loadingSessions, refreshSessions: fetchSessions, getSessionTitle, renameSession }}>
+        <ChatContext.Provider value={{
+            sessions,
+            loadingSessions,
+            refreshSessions: fetchSessions,
+            getSessionTitle,
+            renameSession,
+            totalTokensUsed,
+            setTotalTokensUsed
+        }}>
             {children}
         </ChatContext.Provider>
     );

@@ -1,15 +1,19 @@
 "use client";
 
-import { Bell, Search, Settings, MessageSquare, ChevronRight, Edit2, Loader2 } from "lucide-react";
-import { useAuth } from "@/components/providers/auth-provider";
+import { Bell, Settings, MessageSquare, Edit2, Loader2, RotateCcw, Menu, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ApiService } from "@/lib/api";
 import { useChat } from "@/components/providers/chat-provider";
 import { useSearchParams } from "next/navigation";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useState, useRef, useEffect } from "react";
 
-export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
-    const { user } = useAuth();
-    const { getSessionTitle, renameSession } = useChat();
+interface HeaderProps {
+    onMenuClick?: () => void;
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
+    const { getSessionTitle, renameSession, totalTokensUsed } = useChat();
     const searchParams = useSearchParams();
     const sessionId = searchParams.get("session");
     const sessionTitle = getSessionTitle(sessionId);
@@ -47,15 +51,13 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
     };
 
     return (
-        <header className="h-14 flex items-center justify-between px-4 lg:px-6 border-b border-white/5 backdrop-blur-md bg-background/50 sticky top-0 z-40 gap-4 lg:gap-8">
+        <header className="h-16 bg-background/50 backdrop-blur-md flex items-center justify-between px-4 lg:px-8 relative z-30">
             <div className="flex items-center gap-3 lg:flex-1 min-w-0">
                 <button
                     onClick={onMenuClick}
                     className="p-2 -ml-2 lg:hidden rounded-lg hover:bg-foreground/5 text-muted-foreground"
                 >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+                    <Menu className="w-5 h-5" />
                 </button>
 
                 {sessionTitle && (
@@ -95,7 +97,18 @@ export function Header({ onMenuClick }: { onMenuClick?: () => void }) {
             </div>
 
             <div className="flex items-center gap-2 lg:gap-4">
-                <div className="flex items-center bg-foreground/5 rounded-full px-1.5 py-1 border border-border/50 backdrop-blur-sm self-center">
+                {sessionId && totalTokensUsed > 0 && (
+                    <div className="flex items-center gap-1.5 sm:gap-2.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-foreground/5 border border-border group hover:border-primary/20 transition-all cursor-default animate-in fade-in zoom-in duration-500 shrink-0">
+                        <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary/40 group-hover:text-primary transition-colors" />
+                        <div className="flex flex-col items-start leading-none gap-0.5 sm:gap-0.5">
+                            <span className="text-[7px] sm:text-[8px] uppercase tracking-widest font-black opacity-30 group-hover:opacity-50">Usage</span>
+                            <span className="text-[10px] sm:text-[11px] font-mono font-black text-primary/70 group-hover:text-primary">
+                                {totalTokensUsed.toLocaleString()} <span className="text-[7px] sm:text-[8px] opacity-40 uppercase ml-0.5">TK</span>
+                            </span>
+                        </div>
+                    </div>
+                )}
+                <div className="flex items-center bg-foreground/5 rounded-full px-1.5 py-1 border border-border/50 backdrop-blur-sm self-center shrink-0">
                     <ThemeToggle />
                     <div className="w-px h-4 bg-border/50 mx-1" />
                     <button className="p-1.5 rounded-full hover:bg-foreground/10 text-muted-foreground hover:text-foreground relative transition-all">
