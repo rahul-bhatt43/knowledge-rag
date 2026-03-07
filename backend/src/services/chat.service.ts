@@ -250,3 +250,20 @@ export async function getChatSessionById(sessionId: string, userId: string) {
 export async function deleteChatSession(sessionId: string, userId: string) {
     return ChatSession.findOneAndDelete({ _id: sessionId, userId });
 }
+
+export async function updateChatSession(
+    sessionId: string,
+    userId: string,
+    updates: { documentIds?: string[] },
+) {
+    const updateData: any = {};
+    if (updates.documentIds) {
+        updateData.documentIds = updates.documentIds.map((id) => new Types.ObjectId(id));
+    }
+
+    return ChatSession.findOneAndUpdate(
+        { _id: sessionId, userId },
+        { $set: updateData },
+        { new: true }
+    ).lean();
+}

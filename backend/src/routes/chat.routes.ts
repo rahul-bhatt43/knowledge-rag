@@ -9,6 +9,7 @@ import {
     sendMessage,
     deleteSession,
     getSessionUsage,
+    updateSession,
 } from "@controllers/chat.controller";
 import {
     createSessionValidator,
@@ -68,6 +69,14 @@ router.delete(
     sessionIdValidator,
     validate,
     deleteSession,
+);
+
+// ── Update a session ──────────────────────────────────────────────────────────
+router.put(
+    "/sessions/:sessionId",
+    sessionIdValidator,
+    validate,
+    updateSession,
 );
 
 export default router;

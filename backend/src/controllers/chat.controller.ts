@@ -10,6 +10,7 @@ import {
     getChatSessionById,
     deleteChatSession,
     getChatSessionUsage,
+    updateChatSession,
 } from "@services/chat.service";
 
 // ── POST /api/v1/chat/sessions ────────────────────────────────────────────────
@@ -58,6 +59,18 @@ export const deleteSession = asyncHandler(async (req: Request, res: Response) =>
     );
     if (!session) throw new ApiError(404, "Chat session not found");
     return res.json(new ApiResponse(200, null, "Session deleted"));
+});
+
+// ── PUT /api/v1/chat/sessions/:sessionId ──────────────────────────────────────
+export const updateSession = asyncHandler(async (req: Request, res: Response) => {
+    const { documentIds } = req.body as { documentIds?: string[] };
+    const session = await updateChatSession(
+        req.params.sessionId,
+        req.user!.id.toString(),
+        { documentIds }
+    );
+    if (!session) throw new ApiError(404, "Chat session not found");
+    return res.json(new ApiResponse(200, session, "Session updated"));
 });
 
 // ── POST /api/v1/chat/sessions/:sessionId/messages  (SSE streaming) ───────────
