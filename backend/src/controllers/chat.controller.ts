@@ -79,6 +79,9 @@ export const sendMessage = asyncHandler(async (req: Request, res: Response) => {
     // Helper to write SSE events
     const sendEvent = (event: string, data: unknown) => {
         res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+        if (typeof (res as any).flush === 'function') {
+            (res as any).flush();
+        }
     };
 
     let done = false;

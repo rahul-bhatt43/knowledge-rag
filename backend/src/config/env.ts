@@ -128,6 +128,9 @@ export const config = {
       "text/html",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "text/csv",
+      "application/json",
     ],
   },
 

@@ -17,7 +17,8 @@ import {
     Sparkles,
     Search,
     BookOpen,
-    Mic
+    Mic,
+    Check
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/components/providers/auth-provider";
@@ -54,10 +55,106 @@ export function ChatArea() {
     const [selectedDocIds, setSelectedDocIds] = useState<string[]>([]);
     const [isLoadingDocs, setIsLoadingDocs] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+    const [copiedId, setCopiedId] = useState<string | null>(null);
+
+    // Voice to Text State
+    const [isListening, setIsListening] = useState(false);
+    const recognitionRef = useRef<any>(null);
+
+    const handleCopy = (id: string, content: string) => {
+        navigator.clipboard.writeText(content);
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+    };
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const skipNextHistoryFetch = useRef(false);
+
+    // Initialize Speech Recognition
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                const recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = true;
+                recognition.lang = "en-US";
+
+                recognition.onstart = () => {
+                    setIsListening(true);
+                };
+
+                recognition.onresult = (event: any) => {
+                    let finalTranscript = '';
+                    let interimTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript;
+                        } else {
+                            interimTranscript += event.results[i][0].transcript;
+                        }
+                    }
+
+                    if (finalTranscript) {
+                        setInput(prev => prev + (prev ? " " : "") + finalTranscript);
+                    } else if (interimTranscript) {
+                        // Optional interim handling
+                    }
+                };
+
+                recognition.onerror = (event: any) => {
+                    console.error("Speech recognition error", event.error);
+                    setIsListening(false);
+                };
+
+                recognition.onend = () => {
+                    setIsListening(false);
+                    // We don't auto-send here because user might want to edit.
+                    // If auto-send is strictly required by the prompt, we could, but letting them review is safer.
+                    // Actually, the user specifically requested "when the user is done we must send the message".
+                    // I will implement a custom send execution here. See handleVoiceComplete.
+                };
+
+                recognitionRef.current = recognition;
+            }
+        }
+    }, []);
+
+    const toggleListening = () => {
+        if (isListening) {
+            recognitionRef.current?.stop();
+        } else {
+            recognitionRef.current?.start();
+        }
+    };
+
+    // Auto-send when voice input completes with text
+    useEffect(() => {
+        // If we just stopped listening and we had input that was populated by voice,
+        // we could auto-send. However, `onEnd` doesn't pass the final text reliably if we use state hook dependency.
+        // A cleaner approach: wrap handleSend in a ref so we can call it within onend without stale closures.
+    }, [isListening]);
+
+    // Better Auto-send effect
+    const inputRefState = useRef(input);
+    const isSendingVoiceRef = useRef(false);
+
+    useEffect(() => {
+        inputRefState.current = input;
+    }, [input]);
+
+    useEffect(() => {
+        if (!isListening && isSendingVoiceRef.current && inputRefState.current.trim().length > 0) {
+            isSendingVoiceRef.current = false;
+            // Use querySelector to safely find and click the active send button
+            const sendButton = document.getElementById("chat-send-btn");
+            if (sendButton && !sendButton.hasAttribute("disabled")) {
+                sendButton.click();
+            }
+        }
+    }, [isListening]);
+
 
     // Fetch available documents for selection
     useEffect(() => {
@@ -180,14 +277,17 @@ export function ChatArea() {
             const decoder = new TextDecoder();
 
             let accumulatedContent = "";
-            let currentEvent = "";
+            let buffer = "";
 
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
 
-                const chunk = decoder.decode(value);
-                const lines = chunk.split("\n");
+                buffer += decoder.decode(value, { stream: true });
+                const lines = buffer.split('\n');
+                buffer = lines.pop() || ""; // Keep the last incomplete line in the buffer
+
+                let currentEvent = "";
 
                 for (const line of lines) {
                     if (!line.trim()) continue;
@@ -199,7 +299,7 @@ export function ChatArea() {
                         if (dataStr === "[DONE]") {
                             setIsTyping(false);
                             setIsThinking(false);
-                            // Fetch updated token usage and history for specific metadata
+                            // Fetch updated token usage
                             const usageRes = await ApiService.get<any>(`/chat/sessions/${currentSessionId}/usage`);
                             setTotalTokensUsed(usageRes.totalTokensUsed);
                             break;
@@ -399,7 +499,7 @@ export function ChatArea() {
                                         ) : (
                                             <div className={cn(
                                                 "prose prose-sm dark:prose-invert max-w-none transition-all duration-500 leading-relaxed",
-                                                message.role === "assistant" && "animate-in fade-in blur-in-sm duration-1000"
+                                                message.role === "assistant" && "animate-in fade-in duration-500"
                                             )}>
                                                 <ReactMarkdown
                                                     remarkPlugins={[remarkGfm]}
@@ -414,14 +514,14 @@ export function ChatArea() {
                                                                 : <code className="block bg-foreground/5 p-4 rounded-xl border border-border my-4 text-xs overflow-x-auto" {...props} />
                                                     }}
                                                 >
-                                                    {message.content}
+                                                    {message.content + (message.role === "assistant" && isTyping && message.id.startsWith("bot-") && message.content ? " ▍" : "")}
                                                 </ReactMarkdown>
                                             </div>
                                         )}
 
 
                                         {/* Sources Panel */}
-                                        {message.sources && message.sources.length > 0 && (
+                                        {message.sources && message.sources.length > 0 && (!isTyping || messages[messages.length - 1].id !== message.id) && (
                                             <div className="mt-6 pt-6 border-t border-border space-y-4 animate-in fade-in slide-in-from-top-2 duration-500">
                                                 <div className="flex items-center gap-2">
                                                     <BookOpen className="w-3.5 h-3.5 text-primary" />
@@ -448,7 +548,7 @@ export function ChatArea() {
                                                                         <BookOpen className="w-3 h-3 text-primary" />
                                                                         <span className="text-[9px] uppercase tracking-widest font-black opacity-40">Raw Reference Content</span>
                                                                     </div>
-                                                                    <p className="text-[11px] leading-relaxed text-foreground/80 font-medium italic">
+                                                                    <p className="text-[11px] leading-relaxed text-foreground/80 font-medium italic wrap-break-word whitespace-pre-wrap">
                                                                         "{src.chunkText}"
                                                                     </p>
                                                                 </div>
@@ -466,16 +566,15 @@ export function ChatArea() {
                                             message.role === "user" ? "right-full mr-4" : "left-full ml-4"
                                         )}>
                                             <button
-                                                onClick={() => navigator.clipboard.writeText(message.content)}
+                                                onClick={() => handleCopy(message.id, message.content)}
                                                 className="p-2 rounded-xl bg-foreground/5 border border-border hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-all shadow-xl"
                                             >
-                                                <Copy className="w-4 h-4" />
+                                                {copiedId === message.id ? (
+                                                    <Check className="w-4 h-4 text-emerald-500" />
+                                                ) : (
+                                                    <Copy className="w-4 h-4" />
+                                                )}
                                             </button>
-                                            {message.role === "assistant" && (
-                                                <button className="p-2 rounded-xl bg-foreground/5 border border-border hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-all shadow-xl">
-                                                    <ThumbsUp className="w-4 h-4" />
-                                                </button>
-                                            )}
                                         </div>
                                     </div>
                                 </div>
@@ -516,24 +615,36 @@ export function ChatArea() {
                                     />
 
                                     <div className="flex items-center gap-2">
-                                        <button
-                                            onClick={handleSend}
-                                            disabled={(!input.trim() && !isFocused) || isTyping}
-                                            className={cn(
-                                                "w-11 h-11 rounded-full transition-all duration-500 flex items-center justify-center relative group overflow-hidden",
-                                                (input.trim() || isFocused)
-                                                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-105"
-                                                    : "bg-foreground/5 text-muted-foreground/40 hover:text-foreground"
-                                            )}
-                                        >
-                                            {isTyping || isThinking ? (
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                            ) : (input.trim() || isFocused) ? (
-                                                <Send className="w-4 h-4 relative z-10 animate-in fade-in zoom-in duration-300" />
-                                            ) : (
-                                                <Mic className="w-5 h-5 relative z-10 animate-in fade-in zoom-in duration-300" />
-                                            )}
-                                        </button>
+                                        {(input.trim() || isFocused) ? (
+                                            <button
+                                                id="chat-send-btn"
+                                                onClick={handleSend}
+                                                disabled={(!input.trim() && !isFocused) || isTyping}
+                                                className={cn(
+                                                    "w-11 h-11 rounded-full transition-all duration-500 flex items-center justify-center relative group overflow-hidden bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-105"
+                                                )}
+                                            >
+                                                {isTyping || isThinking ? (
+                                                    <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+                                                ) : (
+                                                    <Send className="w-4 h-4 shrink-0 relative z-10 animate-in fade-in zoom-in duration-300" />
+                                                )}
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={() => {
+                                                    isSendingVoiceRef.current = true;
+                                                    toggleListening();
+                                                }}
+                                                disabled={isTyping}
+                                                className={cn(
+                                                    "w-11 h-11 rounded-full bg-foreground/5 text-muted-foreground/40 hover:text-foreground transition-all duration-500 flex items-center justify-center relative group overflow-hidden",
+                                                    isListening && "bg-red-500/10 text-red-500 hover:text-red-600 animate-pulse border border-red-500/20"
+                                                )}
+                                            >
+                                                <Mic className={cn("w-5 h-5 shrink-0 relative z-10 animate-in fade-in zoom-in duration-300", isListening && "animate-pulse")} />
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             </div>

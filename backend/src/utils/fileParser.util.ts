@@ -3,6 +3,8 @@ import fs from "fs";
 import path from "path";
 const { PDFParse: pdfParse } = require('pdf-parse');
 import logger from "@utils/logger.util";
+import mammoth from "mammoth";
+import * as xlsx from "xlsx";
 
 export interface ParsedFile {
     text: string;
@@ -26,8 +28,20 @@ export async function parseFile(
         return parsePdf(filePath);
     }
 
+    if (ext === ".docx") {
+        return parseDocx(filePath);
+    }
+
+    if ([".xlsx", ".csv"].includes(ext) || effectiveMime === "text/csv") {
+        return parseExcel(filePath);
+    }
+
+    if (ext === ".json" || effectiveMime === "application/json") {
+        return parseJson(filePath);
+    }
+
     if (
-        [".txt", ".md", ".html", ".htm", ".doc", ".docx"].includes(ext) ||
+        [".txt", ".md", ".html", ".htm", ".doc"].includes(ext) ||
         effectiveMime.startsWith("text/")
     ) {
         return parseText(filePath);
@@ -54,6 +68,33 @@ async function parseText(filePath: string): Promise<ParsedFile> {
     return { text };
 }
 
+async function parseDocx(filePath: string): Promise<ParsedFile> {
+    const result = await mammoth.extractRawText({ path: filePath });
+    return { text: result.value };
+}
+
+async function parseExcel(filePath: string): Promise<ParsedFile> {
+    const workbook = xlsx.readFile(filePath);
+    let allText = "";
+    for (const sheetName of workbook.SheetNames) {
+        const sheet = workbook.Sheets[sheetName];
+        const csv = xlsx.utils.sheet_to_csv(sheet);
+        allText += `--- Sheet: ${sheetName} ---\n${csv}\n\n`;
+    }
+    return { text: allText };
+}
+
+async function parseJson(filePath: string): Promise<ParsedFile> {
+    const content = fs.readFileSync(filePath, "utf-8");
+    try {
+        // Validate JSON
+        const parsed = JSON.parse(content);
+        return { text: JSON.stringify(parsed, null, 2) };
+    } catch (e) {
+        throw new Error("Invalid JSON file content");
+    }
+}
+
 function getMimeFromExt(ext: string): string {
     const map: Record<string, string> = {
         ".pdf": "application/pdf",
@@ -64,6 +105,10 @@ function getMimeFromExt(ext: string): string {
         ".doc": "application/msword",
         ".docx":
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ".xlsx":
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        ".csv": "text/csv",
+        ".json": "application/json",
     };
     return map[ext] || "application/octet-stream";
 }

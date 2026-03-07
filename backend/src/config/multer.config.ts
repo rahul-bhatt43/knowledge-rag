@@ -32,7 +32,17 @@ const fileFilter = (
 ) => {
     const allowed = config.upload.allowedMimeTypes;
     const ext = path.extname(file.originalname).toLowerCase();
-    const allowedExts = [".pdf", ".txt", ".md", ".html", ".doc", ".docx"];
+    const allowedExts = [
+        ".pdf",
+        ".txt",
+        ".md",
+        ".html",
+        ".doc",
+        ".docx",
+        ".xlsx",
+        ".csv",
+        ".json",
+    ];
 
     if (allowed.includes(file.mimetype) || allowedExts.includes(ext)) {
         cb(null, true);
@@ -40,7 +50,7 @@ const fileFilter = (
         cb(
             new ApiError(
                 400,
-                `Unsupported file type: ${file.mimetype}. Allowed: PDF, TXT, MD, HTML, DOC, DOCX`,
+                `Unsupported file type: ${file.mimetype}. Allowed: PDF, TXT, MD, HTML, DOC, DOCX, XLSX, CSV, JSON`,
             ),
         );
     }
