@@ -102,8 +102,8 @@ export function Header({ onMenuClick }: HeaderProps) {
                         <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary/40 group-hover:text-primary transition-colors" />
                         <div className="flex flex-col items-start leading-none gap-0.5 sm:gap-0.5">
                             <span className="text-[7px] sm:text-[8px] uppercase tracking-widest font-black opacity-30 group-hover:opacity-50">Usage</span>
-                            <span className="text-[10px] sm:text-[11px] font-mono font-black text-primary/70 group-hover:text-primary">
-                                {totalTokensUsed.toLocaleString()} <span className="text-[7px] sm:text-[8px] opacity-40 uppercase ml-0.5">TK</span>
+                            <span className="text-[10px] sm:text-[11px] font-mono font-black text-primary/80 group-hover:text-primary">
+                                {totalTokensUsed.toLocaleString()} <span className="text-[7px] sm:text-[8px] opacity-80 uppercase ml-0.5">TK</span>
                             </span>
                         </div>
                     </div>

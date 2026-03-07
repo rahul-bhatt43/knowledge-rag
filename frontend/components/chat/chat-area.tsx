@@ -618,9 +618,9 @@ export function ChatArea() {
                     <div className={cn(
                         "max-w-5xl mx-auto relative transition-all duration-500 group"
                     )}>
-                        <div className="absolute -inset-1 bg-linear-to-r from-primary/10 via-transparent to-primary/10 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
+                        <div className="absolute -inset-1 rounded-[32px] blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity" />
 
-                        <div className="relative glass rounded-[24px] lg:rounded-[32px] p-1.5 lg:p-2 border border-border shadow-2xl focus-within:border-primary/30 transition-all bg-foreground/[0.02]">
+                        <div className="relative glass rounded-[24px] lg:rounded-[32px] p-1.5 lg:p-2 border border-border/80 dark:border-primary/20 shadow-2xl focus-within:border-primary/50 transition-all bg-white dark:bg-foreground/[0.03] shadow-[inset_0_1px_1px_rgba(0,0,0,0.05)] dark:shadow-none">
                             <div className="flex flex-col gap-2">
                                 {/* Optional Expandable Doc Manager within Input */}
                                 {sessionId && showDocManager && (
@@ -688,7 +688,7 @@ export function ChatArea() {
                                             }
                                         }}
                                         placeholder="Ask Knowledge AI..."
-                                        className="w-full max-h-48 py-2 bg-transparent border-none outline-none resize-none text-base placeholder:text-muted-foreground/30 font-medium tracking-tight custom-scrollbar"
+                                        className="w-full max-h-48 py-2 bg-transparent border-none outline-none resize-none text-base placeholder:text-muted-foreground/60 font-medium tracking-tight custom-scrollbar"
                                         style={{ height: "auto" }}
                                     />
 

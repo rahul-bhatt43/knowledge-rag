@@ -212,7 +212,7 @@ export function Sidebar({ isMobileOpen, onMobileClose }: { isMobileOpen?: boolea
                                     placeholder="Search chats..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full h-9 bg-foreground/2 dark:bg-foreground/3 border border-border/50 rounded-xl pl-9 pr-3 text-[11px] outline-none focus:border-primary/30 focus:bg-background/50 focus:ring-4 focus:ring-primary/5 transition-all placeholder:text-muted-foreground/30"
+                                    className="w-full h-9 bg-foreground/2 dark:bg-foreground/3 border border-border/50 rounded-xl pl-9 pr-3 text-[11px] outline-none focus:border-primary/30 focus:bg-background/50 focus:ring-4 focus:ring-primary/5 transition-all placeholder:text-muted-foreground/60"
                                 />
                             </div>
                         </div>
@@ -259,11 +259,11 @@ export function Sidebar({ isMobileOpen, onMobileClose }: { isMobileOpen?: boolea
                                                     />
                                                 </div>
                                             ) : (
-                                                <span className="text-xs truncate w-[80%] ">{session.title}</span>
+                                                <span className="text-xs truncate flex-1 min-w-0 pr-12">{session.title}</span>
                                             )}
 
                                             {editingId !== session._id && (
-                                                <div className="opacity-0 group-hover:opacity-100 flex items-center transition-all bg-background/50 backdrop-blur-sm px-1 rounded absolute right-2">
+                                                <div className="opacity-100 lg:opacity-0 lg:group-hover:opacity-100 flex items-center transition-all bg-background/50 lg:bg-background/80 backdrop-blur-sm px-1 rounded-lg absolute right-2 border border-transparent lg:border-border/30 shadow-sm">
                                                     <button
                                                         onClick={(e) => {
                                                             e.preventDefault();
@@ -271,15 +271,16 @@ export function Sidebar({ isMobileOpen, onMobileClose }: { isMobileOpen?: boolea
                                                             setEditingId(session._id);
                                                             setEditTitle(session.title);
                                                         }}
-                                                        className="p-1 hover:text-primary transition-all text-muted-foreground"
+                                                        className="p-1.5 hover:text-primary transition-all text-muted-foreground active:scale-95"
                                                     >
-                                                        <Edit2 className="w-3 h-3" />
+                                                        <Edit2 className="w-3.5 h-3.5" />
                                                     </button>
+                                                    <div className="w-px h-3 bg-border/50 mx-0.5 hidden lg:block" />
                                                     <button
                                                         onClick={(e) => handleDeleteSession(e, session._id)}
-                                                        className="p-1 hover:text-destructive transition-all text-muted-foreground"
+                                                        className="p-1.5 hover:text-destructive transition-all text-muted-foreground active:scale-95"
                                                     >
-                                                        <Trash2 className="w-3 h-3" />
+                                                        <Trash2 className="w-3.5 h-3.5" />
                                                     </button>
                                                 </div>
                                             )}
