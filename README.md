@@ -20,6 +20,13 @@ The "Experience" layer. It features:
 - **Responsive Design**: Premium mobile-first UI with dark mode support.
 - **Token Analytics**: Live monitoring of AI resource consumption.
 
+### 3. [Visualizer (Python & Nomic Atlas)](https://www.google.com/search?q=./visualize.py)
+
+The "Insight" layer. A standalone utility to:
+
+* **Cluster Analysis**: Visualize the high-dimensional vector space of your Pinecone index.
+* **Topic Modeling**: Automatically categorize company documents into visual themes.
+
 ---
 
 ## 🚀 Quick Start Guide
@@ -44,6 +51,32 @@ pnpm dev
 
 The application will be available at **http://localhost:3000**.
 
+### 3. Run the Knowledge Visualizer
+
+To generate a 2D interactive map of your Pinecone vectors:
+
+```bash
+# 1. Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# 2. Install dependencies
+pip install pinecone nomic numpy
+
+# 3. Run the visualizer
+python visualize.py
+
+```
+
+---
+
+## 📊 Knowledge Map Preview
+
+We use **Nomic Atlas** to project our 1536-dimensional embeddings into a browsable 2D map. This allows administrators to see "dead zones" in knowledge or over-represented topics.
+
+> [!TIP]
+> **Live Interactive Map:** [View Company Knowledge Map](https://atlas.nomic.ai/data/rahulbhatt3578/pinecone-map-company-knowledge/map/3c488703-559c-467b-8f46-1402174b983f#mTij)
+
 ---
 
 ## 🧠 The RAG Pipeline
@@ -64,7 +97,7 @@ graph LR
 
 - **Frontend**: Next.js 15, Tailwind CSS 4.0, Lucide, Framer Motion.
 - **Backend**: Node.js, Express, TypeScript, Mongoose.
-- **AI/ML**: OpenAI API (Embeddings & Completion), LangChain.
+- **AI/ML**: OpenAI API (Embeddings & Completion), LangChain, **Nomic Atlas** (Visualization).
 - **Infrastructure**: Pinecone (Vector Store), MongoDB (Metadata).
 
 Refer to the individual [Frontend](./frontend/README.md) and [Backend](./backend/README.md) documentation for deeper technical details.

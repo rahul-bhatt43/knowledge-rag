@@ -1,0 +1,10 @@
+# Secrets
+.env
+
+# Python Virtual Environment
+venv/
+__pycache__/
+*.pyc
+
+# IDE settings
+.idea/
