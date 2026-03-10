@@ -27,12 +27,14 @@ import {
     type TokenUsage,
 } from "./ai.service";
 import { similaritySearch, upsertVectors, deleteAllInNamespace } from "./vectorDb.service";
+import { searchInternet, formatTavilyContext } from "./tavily.service";
 
 // ─── Context building ──────────────────────────────────────────────────────────
 
 interface RetrievedContext {
     contextString: string;
     sources: IChatSource[];
+    hasKbContext: boolean;
 }
 
 async function retrieveContext(
@@ -66,11 +68,29 @@ async function retrieveContext(
         return {
             contextString: "No relevant context found in the knowledge base or chat history.",
             sources: [],
+            hasKbContext: false,
         };
     }
 
-    // 3. Fetch full chunk text from MongoDB (Pinecone metadata is truncated)
-    const vectorIds = results.map((r) => r.id);
+    // 3. Filter results by similarity threshold
+    const threshold = config.ai.similarityThreshold;
+    const filteredResults = results.filter(r => r.score >= threshold);
+
+    logger.info(`[Chat] KB Search: ${results.length} found, ${filteredResults.length} above threshold (${threshold})`);
+    if (results.length > 0 && filteredResults.length === 0) {
+        logger.warn(`[Chat] KB results found but all were below threshold (${results[0].score.toFixed(3)} < ${threshold})`);
+    }
+
+    if (filteredResults.length === 0 && sessionMemResults.length === 0) {
+        return {
+            contextString: "No relevant context found in the knowledge base or chat history.",
+            sources: [],
+            hasKbContext: false,
+        };
+    }
+
+    // 4. Fetch full chunk text from MongoDB for filtered results
+    const vectorIds = filteredResults.map((r) => r.id);
     const chunks = await DocumentChunk.find({ vectorId: { $in: vectorIds } })
         .lean()
         .exec();
@@ -81,7 +101,7 @@ async function retrieveContext(
     const sources: IChatSource[] = [];
     const contextParts: string[] = [];
 
-    for (const result of results) {
+    for (const result of filteredResults) {
         const chunk = chunkMap.get(result.id);
         const chunkText = chunk?.text ?? result.metadata?.text ?? "";
         const fileName = result.metadata?.fileName ?? "Unknown Document";
@@ -90,7 +110,7 @@ async function retrieveContext(
         if (!chunkText) continue;
 
         contextParts.push(
-            `[Source: ${fileName}]\n${chunkText}`,
+            `[Source: ${fileName}] (Score: ${result.score.toFixed(3)})\n${chunkText}`,
         );
 
         sources.push({
@@ -111,6 +131,7 @@ async function retrieveContext(
     return {
         contextString: contextParts.join("\n\n---\n\n"),
         sources,
+        hasKbContext: filteredResults.length > 0,
     };
 }
 
@@ -159,12 +180,43 @@ export async function streamChatAnswer(options: StreamChatOptions): Promise<void
         logger.info(`[Chat] Detected intent: ${intent}. Using Top-K: ${dynamicTopK}`);
 
         // 4. Retrieve context with optional filtering and session memory
-        const { contextString, sources } = await retrieveContext(
+        let { contextString, sources, hasKbContext } = await retrieveContext(
             condensedQueryText,
             dynamicTopK,
             session.documentIds?.map((id) => id.toString()),
             sessionId,
         );
+
+        // --- Tavily Fallback Logic ---
+        // Trigger if NO results found in KB OR if intent is explicitly EXTERNAL
+        const shouldSearchInternet = !hasKbContext || intent === 'EXTERNAL';
+
+        if (shouldSearchInternet) {
+            const reason = !hasKbContext ? "No KB context" : "External intent detected";
+            logger.info(`[Chat] Triggering Tavily search. Reason: ${reason} for query: "${condensedQueryText}"`);
+
+            const webResults = await searchInternet(condensedQueryText);
+            if (webResults.length > 0) {
+                const webContext = formatTavilyContext(webResults);
+
+                // If there's already session memory or weak KB context, append web results
+                if (contextString.includes("No relevant context found")) {
+                    contextString = `SEARCH RESULTS FROM INTERNET:\n${webContext}`;
+                } else {
+                    contextString += `\n\n---\n\nSEARCH RESULTS FROM INTERNET:\n${webContext}`;
+                }
+
+                // Add web sources to the sources list for UI citations
+                webResults.forEach((res, i) => {
+                    sources.push({
+                        documentId: `web-${i}`,
+                        fileName: res.title,
+                        chunkText: res.content,
+                    });
+                });
+            }
+        }
+        // -----------------------------
 
         // Emit sources early so the UI can render them
         onSources(sources);

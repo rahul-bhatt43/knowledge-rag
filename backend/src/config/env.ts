@@ -42,8 +42,9 @@ export const env = {
 
   // AI / Vector DB
   openaiApiKey: process.env.OPENAI_API_KEY || "",
-  pineconeApiKey: process.env.PINECONE_API_KEY || "",
   pineconeIndexName: process.env.PINECONE_INDEX_NAME || "company-knowledge",
+  tavilyApiKey: process.env.TAVILY_API_KEY || "",
+  similarityThreshold: parseFloat(process.env.AI_SIMILARITY_THRESHOLD || "0.81"),
   uploadDir: process.env.UPLOAD_DIR || "uploads",
 };
 
@@ -110,12 +111,17 @@ export const config = {
     chunkSize: 1000,
     chunkOverlap: 200,
     topK: 5,
+    similarityThreshold: parseFloat(process.env.AI_SIMILARITY_THRESHOLD || "0.75"),
   },
 
   pinecone: {
     apiKey: process.env.PINECONE_API_KEY || "",
     indexName: process.env.PINECONE_INDEX_NAME || "company-knowledge",
     namespace: process.env.PINECONE_NAMESPACE || "default",
+  },
+
+  tavily: {
+    apiKey: process.env.TAVILY_API_KEY || "",
   },
 
   upload: {
