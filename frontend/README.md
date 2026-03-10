@@ -4,8 +4,8 @@ A high-performance, enterprise-grade dashboard built with **Next.js 15**, design
 
 ## ✨ Key Features
 
-- **🧠 RAG Chat Interface**: Intelligent, multi-turn chat with your company's knowledge base. Includes real-time streaming and interactive citations.
-- **📄 Document Manager**: Seamlessly upload and manage PDF, DOCX, and TXT files. Track indexing status in real-time.
+- **🧠 RAG Chat Interface**: Intelligent, multi-turn chat with your company's knowledge base. Includes real-time streaming and interactive citations (Source files or Web URLs).
+- **📄 Document Manager**: Seamlessly upload and manage PDF, DOCX, TXT, and **SQL** files. Track indexing status in real-time.
 - **📊 Resource Tracking**: Embedded token usage counter to monitor AI consumption per session.
 - **🌓 Adaptive Theming**: Elegant implementation of Light and Dark modes with a custom "Glass" design system.
 - **📱 Responsive by Design**: Fully optimized for mobile, tablet, and desktop viewports with a native-feel mobile drawer.

@@ -8,10 +8,12 @@ The system is split into two main components:
 
 ### 1. [Backend (Node.js & AI Core)](./backend)
 The "Engine" of the platform. It handles:
-- **Semantic Ingestion**: Parsing PDF/DOCX/TXT files into vector embeddings.
-- **Vector Search**: Real-time retrieval using **Pinecone**.
-- **AI Orchestration**: Grounded chat responses via **OpenAI gpt-4o** with inline citations.
-- **Data Persistence**: MongoDB for metadata and session management.
+- **Semantic Ingestion**: Parsing PDF/DOCX/TXT/SQL files into vector embeddings.
+- **NLP-Driven Retrieval**: Uses **Query Condensation** (NLP) and **Intent Detection** to handle complex follow-up questions and aggregations.
+- **Context-Aware Memory**: Implements session-specific vector memory for coherent multi-turn conversations.
+- **Hybrid RAG & Internet Search**: Integrates **Tavily Search** for real-time internet fallback if internal knowledge is insufficient.
+- **Vector Search**: High-performance retrieval using **Pinecone** namespaces for session memory.
+- **AI Orchestration**: Grounded chat responses via **OpenAI gpt-4o** with accurate inline citations (including URLs for web results).
 
 ### 2. [Frontend (Next.js 15 & Tailwind 4)](./frontend)
 The "Experience" layer. It features:
@@ -82,22 +84,26 @@ We use **Nomic Atlas** to project our 1536-dimensional embeddings into a browsab
 ## 🧠 The RAG Pipeline
 
 ```mermaid
-graph LR
-    A[Upload File] --> B[Semantic Chunking]
-    B --> C[OpenAI Embeddings]
-    C --> D[Pinecone Vector DB]
-    E[User Query] --> F[Similarity Search]
-    D --> F
-    F --> G[Grounded Prompt]
-    G --> H[gpt-4o Streaming]
-    H --> I[Response with Citations]
+graph TD
+    A[User Query] --> B[NLP Query Condensation]
+    B --> C[Intent Detection]
+    C --> D{Similarity Search}
+    D -- Local Knowledge Base --> E[Pinecone DB]
+    D -- Session Memory --> F[Pinecone Namespace]
+    E --> G{Context Sufficient?}
+    F --> G
+    G -- No --> H[Tavily Internet Search]
+    G -- Yes --> I[Grounded Prompt Construction]
+    H --> I
+    I --> J[gpt-4o Generation]
+    J --> K[Streaming Response with Citations]
 ```
 
 ## ⚙️ Core Technologies
 
 - **Frontend**: Next.js 15, Tailwind CSS 4.0, Lucide, Framer Motion.
 - **Backend**: Node.js, Express, TypeScript, Mongoose.
-- **AI/ML**: OpenAI API (Embeddings & Completion), LangChain, **Nomic Atlas** (Visualization).
-- **Infrastructure**: Pinecone (Vector Store), MongoDB (Metadata).
+- **AI/ML**: OpenAI API (Embeddings & Completion GPT-4o), **Tavily Search** (Internet Retrieval), LangChain (Text Splitters).
+- **Infrastructure**: Pinecone (Vector Store), MongoDB (Persistence), Axios.
 
 Refer to the individual [Frontend](./frontend/README.md) and [Backend](./backend/README.md) documentation for deeper technical details.
