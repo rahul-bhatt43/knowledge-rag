@@ -131,6 +131,8 @@ export const config = {
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       "text/csv",
       "application/json",
+      "application/sql",
+      "text/x-sql",
     ],
   },
 

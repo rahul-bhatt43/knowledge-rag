@@ -99,8 +99,106 @@ RULES (strictly follow these):
 2. If the answer cannot be found in the provided context, respond with: "I could not find specific information about that in the uploaded documents. Please check the relevant documents directly or contact your administrator."
 3. Always cite the source document(s) in your answer using the format: [Source: <FileName>]
 4. Be concise, professional, and factual.
-5. Never fabricate statistics, names, dates, or policies.
-6. If the question is ambiguous, ask for clarification.`;
+5. If the user challenges your previous answer (e.g., "Are you sure?", "Double check"), re-verify the provided context and respond based ONLY on that context. Do NOT apologize if you were correct, simply re-state the facts found in the context.
+6. Never fabricate statistics, names, dates, or policies.
+7. If the question is ambiguous, ask for clarification.
+8. For calculations or lists, show your work or the specific data points retrieved.
+9. If multiple documents are cited, list them all.
+10. If the context contains tabular data (rows/headers), treat each record as a separate data point and pay close attention to the [Row: N] label for positional queries.
+11. If the user asks for the "first row", "last row", or a specific row number, use the [Row: N] index provided in the context to identify the correct record.
+12. If the user asks for a total or sum, look for all matching records in the context before calculating.
+13. If the context is empty or irrelevant, do not attempt to guess or use history to invent facts.
+13. Maintain a neutral, enterprise-grade tone. No conversational filler like "Sure!" or "I'd be happy to help."
+14. If a statement is found in 'Previous Chat Memory', treat it as a past fact but prioritize the Knowledge Base for primary source information.
+15. If the user asks about something mentioned earlier in the chat, use the provided context from 'Previous Chat Memory' to maintain consistency.
+16. If the user's question implies a need for a list or sum, and the context provides relevant records, fulfill the request even if it requires processing many items.
+17. Do not state "Based on the context..." or "According to the documents...". Simply provide the answer and cite at the end.
+18. If a value is missing in the data (e.g., a null field), state that the information is unavailable for that specific record.
+19. Respond in valid Markdown. Use tables for structured data when appropriate.
+20. Your primary goal is high precision and factual grounding.
+`;
+
+// ─── Query Condensation (NLP) ────────────────────────────────────────────────
+
+/**
+ * Condense a follow-up question and chat history into a standalone question.
+ * This ensures vector search has enough context to find relevant results.
+ */
+export async function condenseQuery(
+    userMessage: string,
+    history: ChatMessage[],
+): Promise<string> {
+    if (history.length === 0) return userMessage;
+
+    const client = getOpenAIClient();
+    const historyText = history
+        .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
+        .join("\n");
+
+    const prompt = `Given the following conversation history and a follow-up question, rephrase the follow-up question to be a standalone search query that can be understood without the history.
+
+IMPORTANT RULES:
+1. If the user is challenging a previous answer (e.g., "Are you sure?", "Double check", "I think that's wrong"), the standalone query MUST include the original topic/question and the specific data points being questioned.
+   - Example: Chat says "Total is 60". User says "Are you sure?". Standalone: "What is the total quantity of X sold according to the documents?"
+2. If the user asks for a calculation (sum, average, total), the standalone query MUST explicitly mention the requirement to find ALL relevant records.
+   - Example: "Total sales". Standalone: "List all sales records and calculate the total sum."
+3. If the user asks "How many", "List", "Total", the standalone query MUST capture the intent to gather multiple items.
+4. Do NOT answer the question. Just return the rephrased query.
+5. Keep the language technical and precise for search retrieval.
+
+CONVERSATION HISTORY:
+${historyText}
+
+FOLLOW-UP QUESTION:
+${userMessage}
+
+STANDALONE SEARCH QUERY:`;
+
+    try {
+        const response = await client.chat.completions.create({
+            model: config.ai.chatModel,
+            messages: [{ role: "system", content: "You are a helpful assistant that rephrases questions for better search retrieval." }, { role: "user", content: prompt }],
+            temperature: 0,
+            max_tokens: 500,
+        });
+
+        const refined = response.choices[0]?.message?.content?.trim();
+        logger.debug(`[AI] Query condensed: "${userMessage}" -> "${refined}"`);
+        return refined || userMessage;
+    } catch (err) {
+        logger.error("[AI] Query condensation failed", err);
+        return userMessage; // Fallback to original
+    }
+}
+
+/**
+ * Detect if a query has an aggregation or positional intent
+ */
+export function detectIntent(query: string): 'AGGREGATION' | 'POSITIONAL' | 'FACT' {
+    const aggregationKeywords = [
+        "total", "sum", "average", "how many", "list all", "all regions",
+        "count", "aggregate", "summary of", "entire list", "every",
+        "full list", "broken down by"
+    ];
+
+    const positionalKeywords = [
+        "first", "last", "second", "third", "bottom", "top",
+        "row 1", "row 2", "row 3", "row one", "row two", "row three",
+        "row number", "position", "ranked", "starting from"
+    ];
+
+    const lowerQuery = query.toLowerCase();
+
+    if (positionalKeywords.some(keyword => lowerQuery.includes(keyword))) {
+        return 'POSITIONAL';
+    }
+
+    if (aggregationKeywords.some(keyword => lowerQuery.includes(keyword))) {
+        return 'AGGREGATION';
+    }
+
+    return 'FACT';
+}
 
 // ─── Chat Completion (Streaming) ─────────────────────────────────────────────
 

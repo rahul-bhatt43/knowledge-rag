@@ -60,16 +60,27 @@ export async function ingestDocument(documentId: string): Promise<void> {
             doc.pageCount = parsed.pageCount;
         }
 
-        // ── Step 2: Semantic Chunking ─────────────────────────────────────────────
+        // ── Step 2: Specialized Chunking ─────────────────────────────────────────
         logger.info(`[Ingestion] Chunking document...`);
-        const splitter = new RecursiveCharacterTextSplitter({
-            chunkSize: config.ai.chunkSize,
-            chunkOverlap: config.ai.chunkOverlap,
-            separators: ["\n\n", "\n", ". ", "! ", "? ", " ", ""],
-        });
+        let chunks: string[] = [];
 
-        const chunks = await splitter.splitText(parsed.text);
-        logger.info(`[Ingestion] Created ${chunks.length} chunks`);
+        const isTabular = [".xlsx", ".csv"].some(ext => doc.fileName.toLowerCase().endsWith(ext)) || doc.fileType.includes("csv") || doc.fileType.includes("spreadsheet");
+        const isSql = doc.fileName.toLowerCase().endsWith(".sql") || doc.fileType.includes("sql");
+
+        if (isTabular) {
+            chunks = chunkTabularData(parsed.text);
+        } else if (isSql) {
+            chunks = chunkSqlData(parsed.text);
+        } else {
+            const splitter = new RecursiveCharacterTextSplitter({
+                chunkSize: config.ai.chunkSize,
+                chunkOverlap: config.ai.chunkOverlap,
+                separators: ["\n\n", "\n", ". ", "! ", "? ", " ", ""],
+            });
+            chunks = await splitter.splitText(parsed.text);
+        }
+
+        logger.info(`[Ingestion] Created ${chunks.length} chunks using ${isTabular ? 'Tabular' : isSql ? 'SQL' : 'Standard'} splitter`);
 
         if (chunks.length === 0) {
             throw new Error("Document produced zero chunks after splitting.");
@@ -142,4 +153,69 @@ export async function ingestDocument(documentId: string): Promise<void> {
 
         throw err;
     }
+}
+
+/**
+ * Specialized chunker for XLSX / CSV
+ * Splitting by ROW and reinforcing every chunk with HEADERS.
+ */
+function chunkTabularData(text: string): string[] {
+    const sheets = text.split("--- Sheet: ");
+    const allChunks: string[] = [];
+
+    for (const sheetData of sheets) {
+        const trimmed = sheetData.trim();
+        if (!trimmed) continue;
+
+        const lines = trimmed.split("\n");
+        // Identify headers (first row of actual data)
+        const csvLines = lines.filter(l => l.trim().length > 0);
+        if (csvLines.length < 2) continue; // No data rows
+
+        const headers = csvLines[0];
+        const sheetName = "Main"; // Simple fallback for now
+
+        // Every row becomes a chunk with header and row context
+        for (let i = 1; i < csvLines.length; i++) {
+            const row = csvLines[i];
+            allChunks.push(`[Table: ${sheetName}] | [Row: ${i}] | [Headers: ${headers}] | [Record: ${row}]`);
+        }
+    }
+
+    return allChunks;
+}
+
+/**
+ * Specialized chunker for SQL Dumps
+ * Parsing schema (CREATE TABLE) and pairing it with INSERT INTO statements.
+ */
+function chunkSqlData(text: string): string[] {
+    // Basic regex-based splitting by statements
+    const statements = text.split(/;\s*$/m).map(s => s.trim()).filter(s => s.length > 0);
+    const schemaMap: Record<string, string> = {};
+    const chunks: string[] = [];
+
+    // First pass: Extract schemas
+    for (const stmt of statements) {
+        const createMatch = stmt.match(/CREATE\s+TABLE\s+[`"\[]?(\w+)[`"\]]?\s*\(([^)]+)\)/i);
+        if (createMatch) {
+            const tableName = createMatch[1];
+            const schemaInfo = createMatch[2].replace(/\n/g, " ").trim();
+            schemaMap[tableName] = schemaInfo;
+        }
+    }
+
+    // Second pass: Pair data with schema
+    for (const stmt of statements) {
+        const insertMatch = stmt.match(/INSERT\s+INTO\s+[`"\[]?(\w+)[`"\]]?/i);
+        if (insertMatch && schemaMap[insertMatch[1]]) {
+            const tableName = insertMatch[1];
+            chunks.push(`[SQL Table: ${tableName}] | [Schema: ${schemaMap[tableName]}] | [Statement: ${stmt}]`);
+        } else {
+            // Standard SQL statement or block
+            chunks.push(stmt);
+        }
+    }
+
+    return chunks;
 }

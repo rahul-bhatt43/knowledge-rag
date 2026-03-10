@@ -36,6 +36,10 @@ export async function parseFile(
         return parseExcel(filePath);
     }
 
+    if (ext === ".sql" || effectiveMime === "application/sql" || effectiveMime === "text/x-sql") {
+        return parseSql(filePath);
+    }
+
     if (ext === ".json" || effectiveMime === "application/json") {
         return parseJson(filePath);
     }
@@ -84,6 +88,11 @@ async function parseExcel(filePath: string): Promise<ParsedFile> {
     return { text: allText };
 }
 
+async function parseSql(filePath: string): Promise<ParsedFile> {
+    const text = fs.readFileSync(filePath, "utf-8");
+    return { text };
+}
+
 async function parseJson(filePath: string): Promise<ParsedFile> {
     const content = fs.readFileSync(filePath, "utf-8");
     try {
@@ -109,6 +118,7 @@ function getMimeFromExt(ext: string): string {
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         ".csv": "text/csv",
         ".json": "application/json",
+        ".sql": "application/sql",
     };
     return map[ext] || "application/octet-stream";
 }

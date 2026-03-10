@@ -20,11 +20,13 @@ import {
     generateEmbedding,
     streamChatCompletion,
     SYSTEM_PROMPT,
+    condenseQuery,
+    detectIntent,
     type ChatMessage,
     type StreamCallbacks,
     type TokenUsage,
 } from "./ai.service";
-import { similaritySearch } from "./vectorDb.service";
+import { similaritySearch, upsertVectors, deleteAllInNamespace } from "./vectorDb.service";
 
 // ─── Context building ──────────────────────────────────────────────────────────
 
@@ -37,6 +39,7 @@ async function retrieveContext(
     query: string,
     topK: number = config.ai.topK,
     documentIds?: string[],
+    sessionId?: string,
 ): Promise<RetrievedContext> {
     // 1. Embed the query
     const queryVector = await generateEmbedding(query);
@@ -48,9 +51,20 @@ async function retrieveContext(
 
     const results = await similaritySearch(queryVector, topK, filter);
 
-    if (results.length === 0) {
+    // 2.5 Query session-specific memory if sessionId is provided
+    let sessionMemResults: any[] = [];
+    if (sessionId) {
+        sessionMemResults = await similaritySearch(
+            queryVector,
+            3, // top 3 from memory
+            undefined,
+            `chat-mem-${sessionId}`
+        );
+    }
+
+    if (results.length === 0 && sessionMemResults.length === 0) {
         return {
-            contextString: "No relevant context found in the knowledge base.",
+            contextString: "No relevant context found in the knowledge base or chat history.",
             sources: [],
         };
     }
@@ -85,6 +99,13 @@ async function retrieveContext(
             chunkText: chunkText.slice(0, 300), // trim for response payload
             chunkIndex: chunk?.chunkIndex,
         });
+    }
+
+    // Add session memory to context if available
+    for (const res of sessionMemResults) {
+        const text = res.metadata?.text || "";
+        if (!text) continue;
+        contextParts.push(`[Source: Previous Chat Memory]\n${text}`);
     }
 
     return {
@@ -128,20 +149,28 @@ export async function streamChatAnswer(options: StreamChatOptions): Promise<void
     }
 
     try {
-        // 2. Retrieve context with optional filtering by session's documentIds
+        // 2. Query refinement: Get standalone question for retrieval
+        const historyMessages = buildChatHistory(session.messages);
+        const condensedQueryText = await condenseQuery(userMessage, historyMessages);
+
+        // 3. Detect intent and determine Top-K
+        const intent = detectIntent(condensedQueryText);
+        const dynamicTopK = (intent === 'AGGREGATION' || intent === 'POSITIONAL') ? 1000 : config.ai.topK;
+        logger.info(`[Chat] Detected intent: ${intent}. Using Top-K: ${dynamicTopK}`);
+
+        // 4. Retrieve context with optional filtering and session memory
         const { contextString, sources } = await retrieveContext(
-            userMessage,
-            config.ai.topK,
+            condensedQueryText,
+            dynamicTopK,
             session.documentIds?.map((id) => id.toString()),
+            sessionId,
         );
 
         // Emit sources early so the UI can render them
         onSources(sources);
 
-        // 3. Build message array: system + history + context + current question
-        const historyMessages = buildChatHistory(session.messages);
-
-        const userPromptWithContext = `CONTEXT FROM COMPANY KNOWLEDGE BASE:
+        // 4. Build message array: system + history + context + current question
+        const userPromptWithContext = `CONTEXT FROM COMPANY KNOWLEDGE BASE AND PREVIOUS CHAT:
 ${contextString}
 
 USER QUESTION:
@@ -191,8 +220,42 @@ ${userMessage}`;
                 session.totalTokensUsed += usage.totalTokens;
                 await session.save();
 
+                // 7. Index new messages into session memory namespace
+                try {
+                    const [userVec, assistantVec] = await Promise.all([
+                        generateEmbedding(userMessage),
+                        generateEmbedding(fullText)
+                    ]);
+                    const namespace = `chat-mem-${sessionId}`;
+
+                    await upsertVectors([
+                        {
+                            id: `u-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                            values: userVec,
+                            metadata: {
+                                documentId: "session-memory",
+                                fileName: "Chat History",
+                                chunkIndex: session.messages.length - 2,
+                                text: userMessage,
+                            }
+                        },
+                        {
+                            id: `a-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                            values: assistantVec,
+                            metadata: {
+                                documentId: "session-memory",
+                                fileName: "Chat History",
+                                chunkIndex: session.messages.length - 1,
+                                text: fullText,
+                            }
+                        }
+                    ], namespace);
+                } catch (memErr) {
+                    logger.error(`[Chat] Failed to index session memory for ${sessionId}`, memErr);
+                }
+
                 logger.info(
-                    `[Chat] Session ${sessionId} — answer streamed. Tokens: ${usage.totalTokens}`,
+                    `[Chat] Session ${sessionId} — answer streamed and indexed. Tokens: ${usage.totalTokens}`,
                 );
 
                 onComplete();
@@ -248,7 +311,14 @@ export async function getChatSessionById(sessionId: string, userId: string) {
 }
 
 export async function deleteChatSession(sessionId: string, userId: string) {
-    return ChatSession.findOneAndDelete({ _id: sessionId, userId });
+    const session = await ChatSession.findOneAndDelete({ _id: sessionId, userId });
+    if (session) {
+        // Clean up session-specific vector memory in the background
+        deleteAllInNamespace(`chat-mem-${sessionId}`).catch((err) => {
+            logger.error(`[Chat] Failed to clean up session memory for ${sessionId}`, err);
+        });
+    }
+    return session;
 }
 
 export async function updateChatSession(

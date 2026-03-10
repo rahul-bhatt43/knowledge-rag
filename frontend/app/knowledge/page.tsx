@@ -158,7 +158,7 @@ export default function KnowledgePage() {
                     <div className="text-center space-y-3 relative z-10">
                         <h3 className="font-extrabold text-3xl tracking-tight text-foreground">Drop files to index</h3>
                         <p className="text-muted-foreground/60 text-sm max-w-xs mx-auto">
-                            Add PDF, DOCX, TXT, XLSX, CSV, or JSON files to train your AI assistant with custom knowledge.
+                            Add PDF, DOCX, TXT, XLSX, CSV, JSON, or SQL files to train your AI assistant with custom knowledge.
                         </p>
                     </div>
 
@@ -169,7 +169,7 @@ export default function KnowledgePage() {
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-2 relative z-10 max-w-[250px]">
-                        {['PDF', 'DOCX', 'TXT', 'XLSX', 'CSV', 'JSON'].map(fmt => (
+                        {['PDF', 'DOCX', 'TXT', 'XLSX', 'CSV', 'JSON', 'SQL'].map(fmt => (
                             <span key={fmt} className="px-4 py-1.5 bg-foreground/5 rounded-xl border border-border text-[10px] font-bold opacity-40 tracking-widest uppercase">
                                 {fmt}
                             </span>

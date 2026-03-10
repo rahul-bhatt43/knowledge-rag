@@ -20,9 +20,19 @@ function getPineconeClient(): Pinecone {
     return pineconeClient;
 }
 
-function getIndex() {
+function getIndex(namespace?: string) {
     const client = getPineconeClient();
-    return client.index(config.pinecone.indexName).namespace(config.pinecone.namespace);
+    return client.index(config.pinecone.indexName).namespace(namespace || config.pinecone.namespace);
+}
+
+/**
+ * Delete all vectors in a specific namespace (used for session cleanup)
+ */
+export async function deleteAllInNamespace(namespace: string): Promise<void> {
+    if (!namespace) return;
+    const index = getIndex(namespace);
+    await index.deleteAll();
+    logger.info(`[VectorDB] Deleted all vectors in namespace: ${namespace}`);
 }
 
 export interface VectorRecord {
@@ -46,10 +56,10 @@ export interface SimilarityResult {
 /**
  * Upsert a batch of vector records into Pinecone
  */
-export async function upsertVectors(records: VectorRecord[]): Promise<void> {
+export async function upsertVectors(records: VectorRecord[], namespace?: string): Promise<void> {
     if (records.length === 0) return;
 
-    const index = getIndex();
+    const index = getIndex(namespace);
     const batchSize = 100; // Pinecone recommends batches of 100
 
     for (let i = 0; i < records.length; i += batchSize) {
@@ -68,8 +78,9 @@ export async function similaritySearch(
     queryVector: number[],
     topK: number = config.ai.topK,
     filter?: Record<string, unknown>,
+    namespace?: string,
 ): Promise<SimilarityResult[]> {
-    const index = getIndex();
+    const index = getIndex(namespace);
 
     const queryOptions: Parameters<typeof index.query>[0] = {
         vector: queryVector,
