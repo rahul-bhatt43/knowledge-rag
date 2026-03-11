@@ -33,6 +33,7 @@ const fileFilter = (
     const allowed = config.upload.allowedMimeTypes;
     const ext = path.extname(file.originalname).toLowerCase();
     const allowedExts = [
+        // Documents
         ".pdf",
         ".txt",
         ".md",
@@ -42,6 +43,15 @@ const fileFilter = (
         ".xlsx",
         ".csv",
         ".json",
+        ".sql",
+        // Audio / Video
+        ".mp3",
+        ".wav",
+        ".ogg",
+        ".m4a",
+        ".mp4",
+        ".webm",
+        ".mov",
     ];
 
     if (allowed.includes(file.mimetype) || allowedExts.includes(ext)) {
@@ -50,7 +60,7 @@ const fileFilter = (
         cb(
             new ApiError(
                 400,
-                `Unsupported file type: ${file.mimetype}. Allowed: PDF, TXT, MD, HTML, DOC, DOCX, XLSX, CSV, JSON`,
+                `Unsupported file type: ${file.mimetype}. Allowed: PDF, TXT, MD, HTML, DOC, DOCX, XLSX, CSV, JSON, SQL, MP3, WAV, OGG, M4A, MP4, WEBM, MOV`,
             ),
         );
     }
@@ -60,7 +70,9 @@ export const uploadMiddleware = multer({
     storage,
     fileFilter,
     limits: {
-        fileSize: config.upload.maxFileSizeMb * 1024 * 1024, // convert MB to bytes
-        files: 5, // max 5 files per request
+        // Allow up to 500 MB to cover large audio/video meeting recordings.
+        // The controller validates file size further per type if needed.
+        fileSize: 500 * 1024 * 1024,
+        files: 5,
     },
 });

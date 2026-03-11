@@ -22,6 +22,18 @@ export interface IDocument extends Document {
     description?: string;
     tags?: string[];
     errorMessage?: string;
+    // ── Audio / Meeting fields (optional, only set for audio uploads) ──
+    isAudioFile?: boolean;
+    transcript?: string;
+    durationSeconds?: number;
+    speakerCount?: number;
+    analytics?: {
+        sentiment: 'positive' | 'neutral' | 'negative';
+        sentimentScore: number;
+        keyTopics: string[];
+        actionItems: string[];
+        generatedAt: Date;
+    };
     createdAt: Date;
     updatedAt: Date;
 }
@@ -78,6 +90,29 @@ const DocumentSchema = new Schema<IDocument>(
         },
         errorMessage: {
             type: String,
+        },
+        // ── Audio / Meeting fields ────────────────────────────────────────────
+        isAudioFile: {
+            type: Boolean,
+            default: false,
+        },
+        transcript: {
+            type: String,
+        },
+        durationSeconds: {
+            type: Number,
+        },
+        speakerCount: {
+            type: Number,
+        },
+        analytics: {
+            type: new Schema({
+                sentiment: { type: String, enum: ['positive', 'neutral', 'negative'] },
+                sentimentScore: { type: Number },
+                keyTopics: { type: [String], default: [] },
+                actionItems: { type: [String], default: [] },
+                generatedAt: { type: Date },
+            }, { _id: false }),
         },
     },
     {

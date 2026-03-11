@@ -268,6 +268,70 @@ export async function streamChatCompletion(
     }
 }
 
+// ─── Meeting Analytics ────────────────────────────────────────────────────────
+
+export interface MeetingAnalytics {
+    sentiment: "positive" | "neutral" | "negative";
+    sentimentScore: number;     // -1.0 (very negative) to 1.0 (very positive)
+    keyTopics: string[];        // up to 8 main discussion topics
+    actionItems: string[];      // explicit action items / decisions made
+}
+
+/**
+ * Analyse a meeting transcript with GPT.
+ * Returns structured analytics that are cached on the Document model.
+ */
+export async function analyzeMeetingTranscript(transcript: string): Promise<MeetingAnalytics> {
+    const client = getOpenAIClient();
+
+    // Limit to ~12 000 chars to stay within token budget
+    const truncated = transcript.slice(0, 12000);
+
+    const systemPrompt = `You are an enterprise meeting analytics assistant.
+Analyse the provided meeting transcript and return ONLY a valid JSON object with exactly these keys:
+{
+  "sentiment": "positive" | "neutral" | "negative",
+  "sentimentScore": <number from -1.0 to 1.0>,
+  "keyTopics": [<up to 8 concise topic strings>],
+  "actionItems": [<explicit action items or decisions, empty array if none>]
+}
+Do NOT include any text outside the JSON object.`;
+
+    try {
+        const response = await client.chat.completions.create({
+            model: config.ai.chatModel,
+            messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: `TRANSCRIPT:\n${truncated}` },
+            ],
+            temperature: 0,
+            max_tokens: 1000,
+            response_format: { type: "json_object" },
+        });
+
+        const raw = response.choices[0]?.message?.content?.trim() ?? "{}";
+        const parsed = JSON.parse(raw) as Partial<MeetingAnalytics>;
+
+        const sentiment = (["positive", "neutral", "negative"] as const).includes(
+            parsed.sentiment as "positive" | "neutral" | "negative",
+        )
+            ? parsed.sentiment!
+            : "neutral";
+
+        return {
+            sentiment,
+            sentimentScore: typeof parsed.sentimentScore === "number"
+                ? Math.max(-1, Math.min(1, parsed.sentimentScore))
+                : 0,
+            keyTopics: Array.isArray(parsed.keyTopics) ? parsed.keyTopics.slice(0, 8) : [],
+            actionItems: Array.isArray(parsed.actionItems) ? parsed.actionItems : [],
+        };
+    } catch (err: unknown) {
+        logger.error("[AI] Meeting analytics failed", err);
+        throw handleOpenAIError(err);
+    }
+}
+
 // ─── Error handling ───────────────────────────────────────────────────────────
 
 function handleOpenAIError(err: unknown): ApiError {

@@ -107,11 +107,16 @@ export const config = {
     openaiApiKey: process.env.OPENAI_API_KEY || "",
     embeddingModel: "text-embedding-ada-002",
     chatModel: process.env.OPENAI_CHAT_MODEL || "gpt-4o-mini",
+    whisperModel: "whisper-1",
     maxRetries: 3,
     chunkSize: 1000,
     chunkOverlap: 200,
     topK: 5,
     similarityThreshold: parseFloat(process.env.AI_SIMILARITY_THRESHOLD || "0.75"),
+  },
+
+  assemblyai: {
+    apiKey: process.env.ASSEMBLYAI_API_KEY || "",
   },
 
   pinecone: {
@@ -127,7 +132,9 @@ export const config = {
   upload: {
     dir: process.env.UPLOAD_DIR || "uploads",
     maxFileSizeMb: parseInt(process.env.MAX_FILE_SIZE_MB || "50", 10),
+    maxAudioFileSizeMb: parseInt(process.env.MAX_AUDIO_FILE_SIZE_MB || "500", 10),
     allowedMimeTypes: [
+      // Documents
       "application/pdf",
       "text/plain",
       "text/markdown",
@@ -139,7 +146,27 @@ export const config = {
       "application/json",
       "application/sql",
       "text/x-sql",
+      // Audio / Video
+      "audio/mpeg",
+      "audio/wav",
+      "audio/ogg",
+      "audio/mp4",
+      "audio/x-m4a",
+      "video/mp4",
+      "video/webm",
+      "video/quicktime",
     ],
+    audioMimeTypes: new Set([
+      "audio/mpeg",
+      "audio/wav",
+      "audio/ogg",
+      "audio/mp4",
+      "audio/x-m4a",
+      "video/mp4",
+      "video/webm",
+      "video/quicktime",
+    ]),
+    audioExtensions: new Set([".mp3", ".wav", ".ogg", ".m4a", ".mp4", ".webm", ".mov"]),
   },
 
   bullmq: {

@@ -8,7 +8,9 @@ import { DocumentModel, DocumentStatus } from "@models/Document.model";
 import { DocumentChunk } from "@models/DocumentChunk.model";
 import { enqueueIngestionJob } from "@jobs/ingestDocument.job";
 import { deleteVectorsByDocumentId } from "@services/vectorDb.service";
+import { analyzeMeetingTranscript } from "@services/ai.service";
 import logger from "@utils/logger.util";
+import { generateMeetingSummaryPdf } from "@services/pdf.service";
 
 // ── POST /api/v1/documents/upload ─────────────────────────────────────────────
 export const uploadDocument = asyncHandler(async (req: Request, res: Response) => {
@@ -160,4 +162,88 @@ export const reprocessDocument = asyncHandler(async (req: Request, res: Response
     return res.json(
         new ApiResponse(200, { documentId: id, status: doc.status }, "Reprocessing started"),
     );
+});
+
+// ── GET /api/v1/documents/:id/analytics ──────────────────────────────────────
+export const getMeetingAnalytics = asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const doc = await DocumentModel.findById(id);
+
+    if (!doc) throw new ApiError(404, "Document not found");
+    if (!doc.isAudioFile) throw new ApiError(400, "Analytics are only available for audio documents");
+    if (doc.status !== DocumentStatus.READY) {
+        throw new ApiError(400, `Document is not ready yet (status: ${doc.status})`);
+    }
+    if (!doc.transcript) {
+        throw new ApiError(422, "No transcript found for this document. Please reprocess it.");
+    }
+
+    // Return cached analytics if < 24h old
+    const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+    if (
+        doc.analytics?.generatedAt &&
+        Date.now() - doc.analytics.generatedAt.getTime() < CACHE_TTL_MS
+    ) {
+        logger.info(`[Analytics] Returning cached analytics for ${doc.fileName}`);
+        return res.json(new ApiResponse(200, doc.analytics, "Analytics retrieved from cache"));
+    }
+
+    // Generate fresh analytics
+    logger.info(`[Analytics] Generating analytics for ${doc.fileName}...`);
+    const result = await analyzeMeetingTranscript(doc.transcript);
+
+    // Cache on document
+    doc.analytics = { ...result, generatedAt: new Date() };
+    await doc.save();
+
+    logger.info(`[Analytics] ✅ Done for ${doc.fileName} — sentiment: ${result.sentiment}`);
+    return res.json(new ApiResponse(200, doc.analytics, "Analytics generated successfully"));
+});
+
+// ── GET /api/v1/documents/:id/transcript/download ────────────────────────────
+export const downloadTranscript = asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const doc = await DocumentModel.findById(id);
+
+    if (!doc) throw new ApiError(404, "Document not found");
+    if (!doc.transcript) throw new ApiError(404, "Transcript not available for this document");
+
+    const safeFileName = doc.fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+    res.setHeader("Content-Disposition", `attachment; filename="${safeFileName}_transcript.txt"`);
+    res.setHeader("Content-Type", "text/plain");
+
+    return res.send(doc.transcript);
+});
+
+// ── GET /api/v1/documents/:id/summary/pdf ────────────────────────────────────
+export const downloadSummaryPdf = asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const doc = await DocumentModel.findById(id);
+
+    if (!doc) throw new ApiError(404, "Document not found");
+    if (!doc.isAudioFile) throw new ApiError(400, "PDF Summary is only available for meeting audio");
+    if (!doc.transcript || !doc.analytics) {
+        throw new ApiError(422, "Analytics/Transcript not ready. Please generate analytics first.");
+    }
+
+    const safeFileName = doc.fileName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+
+    const pdfBuffer = await generateMeetingSummaryPdf({
+        title: doc.fileName,
+        date: doc.createdAt.toLocaleDateString(),
+        duration: doc.durationSeconds ? `${Math.floor(doc.durationSeconds / 60)}m ${Math.floor(doc.durationSeconds % 60)}s` : "Unknown",
+        speakers: doc.speakerCount || 0,
+        sentiment: doc.analytics.sentiment,
+        sentimentScore: doc.analytics.sentimentScore,
+        keyTopics: doc.analytics.keyTopics,
+        actionItems: doc.analytics.actionItems,
+        transcript: doc.transcript
+    });
+
+    res.setHeader("Content-Disposition", `attachment; filename="${safeFileName}_summary.pdf"`);
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Length", pdfBuffer.length);
+
+    return res.send(pdfBuffer);
 });

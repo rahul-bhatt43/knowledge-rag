@@ -16,6 +16,20 @@ import { DocumentChunk } from "@models/DocumentChunk.model";
 
 import { generateEmbeddings } from "./ai.service";
 import { upsertVectors, type VectorRecord } from "./vectorDb.service";
+import { ingestAudioDocument } from "./audioIngestion.service";
+import path from "path";
+
+// ─── Audio file detection ─────────────────────────────────────────────────────
+const AUDIO_MIME_TYPES = new Set([
+    "audio/mpeg", "audio/wav", "audio/ogg", "audio/mp4",
+    "audio/x-m4a", "video/mp4", "video/webm", "video/quicktime",
+]);
+const AUDIO_EXTENSIONS = new Set([".mp3", ".wav", ".ogg", ".m4a", ".mp4", ".webm", ".mov"]);
+
+function isAudioFile(fileType: string, fileName: string): boolean {
+    const ext = path.extname(fileName).toLowerCase();
+    return AUDIO_MIME_TYPES.has(fileType) || AUDIO_EXTENSIONS.has(ext);
+}
 
 /**
  * Main ingestion function — called by the BullMQ worker or the in-process fallback.
@@ -25,6 +39,11 @@ export async function ingestDocument(documentId: string): Promise<void> {
     const doc = await DocumentModel.findById(documentId);
     if (!doc) {
         throw new Error(`Document not found: ${documentId}`);
+    }
+
+    // ── Audio branch: delegate to dedicated audio ingestion pipeline ──────────
+    if (isAudioFile(doc.fileType, doc.fileName)) {
+        return ingestAudioDocument(documentId);
     }
 
     logger.info(`[Ingestion] Starting ingestion for: ${doc.fileName} (${documentId})`);

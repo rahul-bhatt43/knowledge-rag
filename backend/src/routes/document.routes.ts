@@ -12,6 +12,9 @@ import {
     getDocumentStatus,
     deleteDocument,
     reprocessDocument,
+    getMeetingAnalytics,
+    downloadTranscript,
+    downloadSummaryPdf,
 } from "@controllers/document.controller";
 import {
     uploadDocumentValidator,
@@ -56,6 +59,30 @@ router.get(
     documentIdValidator,
     validate,
     getDocumentStatus,
+);
+
+// ── Get meeting analytics (audio docs only, all roles) ────────────────────────
+router.get(
+    "/:id/analytics",
+    documentIdValidator,
+    validate,
+    getMeetingAnalytics,
+);
+
+// ── Download raw transcript (.txt) ───────────────────────────────────────────
+router.get(
+    "/:id/transcript/download",
+    documentIdValidator,
+    validate,
+    downloadTranscript,
+);
+
+// ── Download summary PDF ──────────────────────────────────────────────────────
+router.get(
+    "/:id/summary/pdf",
+    documentIdValidator,
+    validate,
+    downloadSummaryPdf,
 );
 
 // ── Reprocess a failed document (ADMIN, MANAGER) ────────────────────────────
