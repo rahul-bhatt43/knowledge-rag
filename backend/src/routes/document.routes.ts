@@ -15,6 +15,7 @@ import {
     getMeetingAnalytics,
     downloadTranscript,
     downloadSummaryPdf,
+    saveTemporaryDocument,
 } from "@controllers/document.controller";
 import {
     uploadDocumentValidator,
@@ -101,6 +102,14 @@ router.delete(
     documentIdValidator,
     validate,
     deleteDocument,
+);
+
+// ── Save a temporary document ──────────────────────────────────────────────────
+router.patch(
+    "/:id/save",
+    documentIdValidator,
+    validate,
+    saveTemporaryDocument,
 );
 
 export default router;

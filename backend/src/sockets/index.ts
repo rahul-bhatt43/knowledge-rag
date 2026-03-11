@@ -4,6 +4,7 @@ import {
   AuthenticatedSocket,
 } from "./middleware/socket.auth";
 import { handleNotificationEvents } from "./handlers/notification.handler";
+import { handleTranscriptionEvents } from "./handlers/transcription.handler";
 
 export const initializeSocket = (io: Server) => {
   // Authentication middleware
@@ -23,6 +24,7 @@ export const initializeSocket = (io: Server) => {
 
     // Initialize event handlers
     handleNotificationEvents(io, socket);
+    handleTranscriptionEvents(io, socket);
 
     // Handle typing indicator (example)
     socket.on("typing:start", (data: { taskId: string }) => {

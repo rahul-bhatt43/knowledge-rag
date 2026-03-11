@@ -18,7 +18,7 @@ export const uploadDocument = asyncHandler(async (req: Request, res: Response) =
         throw new ApiError(400, "No file uploaded");
     }
 
-    const { description, tags } = req.body as { description?: string; tags?: string };
+    const { description, tags, isTemporary } = req.body as { description?: string; tags?: string; isTemporary?: boolean };
     const file = req.file;
 
     // Create Document record in MongoDB
@@ -34,6 +34,7 @@ export const uploadDocument = asyncHandler(async (req: Request, res: Response) =
         tags: tags
             ? tags.split(",").map((t) => t.trim()).filter(Boolean)
             : [],
+        isTemporary: isTemporary || false,
     });
 
     logger.info(`[Document] Uploaded: ${doc.fileName} → ${doc._id}`);
@@ -139,6 +140,22 @@ export const deleteDocument = asyncHandler(async (req: Request, res: Response) =
     return res.json(
         new ApiResponse(200, null, `Document "${doc.fileName}" deleted successfully`),
     );
+});
+
+// ── PATCH /api/v1/documents/:id/save ─────────────────────────────────────────
+export const saveTemporaryDocument = asyncHandler(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const doc = await DocumentModel.findById(id);
+
+    if (!doc) throw new ApiError(404, "Document not found");
+
+    doc.isTemporary = false;
+    await doc.save();
+
+    return res.json(new ApiResponse(200, {
+        documentId: doc._id,
+        isTemporary: doc.isTemporary
+    }, "Document saved successfully"));
 });
 
 // ── POST /api/v1/documents/:id/reprocess ─────────────────────────────────────

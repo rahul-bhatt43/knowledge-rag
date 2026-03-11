@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { API_BASE_URL, ApiService } from "@/lib/api";
+import { LiveTranscriptPiP } from "@/components/LiveTranscriptPiP";
+import { PostMeetingModal } from "@/components/PostMeetingModal";
 
 interface Document {
     _id: string;
@@ -291,6 +293,8 @@ export default function KnowledgePage() {
     const [uploading, setUploading] = useState(false);
     const [isDragging, setIsDragging] = useState(false);
     const [selectedAudioDoc, setSelectedAudioDoc] = useState<Document | null>(null);
+    const [isLiveTranscriptOpen, setIsLiveTranscriptOpen] = useState(false);
+    const [postMeetingDocId, setPostMeetingDocId] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const fetchDocuments = async () => {
@@ -342,6 +346,20 @@ export default function KnowledgePage() {
 
     return (
         <DashboardLayout>
+            <LiveTranscriptPiP
+                isOpen={isLiveTranscriptOpen}
+                onClose={() => setIsLiveTranscriptOpen(false)}
+                onRecordingComplete={(id) => setPostMeetingDocId(id)}
+            />
+
+            {postMeetingDocId && (
+                <PostMeetingModal
+                    documentId={postMeetingDocId}
+                    onClose={() => setPostMeetingDocId(null)}
+                    onSaved={() => fetchDocuments()}
+                />
+            )}
+
             {selectedAudioDoc && (
                 <AudioDetailModal
                     doc={selectedAudioDoc}
@@ -436,6 +454,17 @@ export default function KnowledgePage() {
                             </span>
                         ))}
                     </div>
+
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setIsLiveTranscriptOpen(true);
+                        }}
+                        className="mt-6 mx-auto relative z-10 hidden sm:flex items-center gap-3 px-6 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 rounded-2xl font-bold transition-all shadow-[0_0_20px_rgba(239,68,68,0.1)] hover:shadow-[0_0_30px_rgba(239,68,68,0.2)]"
+                    >
+                        <Mic className="w-5 h-5 animate-pulse" />
+                        Start Live Transcription
+                    </button>
                 </div>
 
                 {/* Document List */}

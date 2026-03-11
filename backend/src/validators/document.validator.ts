@@ -13,6 +13,10 @@ export const uploadDocumentValidator = [
         .optional()
         .isString()
         .withMessage("Tags must be a comma-separated string"),
+    body("isTemporary")
+        .optional()
+        .isBoolean()
+        .toBoolean(),
 ];
 
 export const listDocumentsValidator = [

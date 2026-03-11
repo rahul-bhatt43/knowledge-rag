@@ -41,6 +41,13 @@ export class ApiService {
         });
     }
 
+    static patch<T>(endpoint: string, body?: any) {
+        return this.request<T>(endpoint, {
+            method: "PATCH",
+            body: body ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
+        });
+    }
+
     static put<T>(endpoint: string, body: any) {
         return this.request<T>(endpoint, {
             method: "PUT",

@@ -22,6 +22,7 @@ export interface IDocument extends Document {
     description?: string;
     tags?: string[];
     errorMessage?: string;
+    isTemporary?: boolean;
     // ── Audio / Meeting fields (optional, only set for audio uploads) ──
     isAudioFile?: boolean;
     transcript?: string;
@@ -90,6 +91,10 @@ const DocumentSchema = new Schema<IDocument>(
         },
         errorMessage: {
             type: String,
+        },
+        isTemporary: {
+            type: Boolean,
+            default: false,
         },
         // ── Audio / Meeting fields ────────────────────────────────────────────
         isAudioFile: {
